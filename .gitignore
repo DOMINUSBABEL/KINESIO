@@ -6,3 +6,6 @@ __pycache__/
 *.wav
 verify_output.json
 capsules/
+trailers/
+screenshots/
+temp_render*/
