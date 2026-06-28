@@ -1,0 +1,8 @@
+# Ignore local audio, video, and cache files
+temp_frames*/
+__pycache__/
+*.mp4
+*.mp3
+*.wav
+verify_output.json
+capsules/
