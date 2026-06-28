@@ -39,7 +39,7 @@ RTS_GAMES = [
     },
     {
         "title": "Dune: Spice Wars",
-        "capsule": "dune_spice_wars_1171690.jpg",
+        "capsule": "dune_spice_wars_1605220.jpg",
         "discount": "-60%",
         "price": "AHORA $15.99 | ANTES $39.99"
     },

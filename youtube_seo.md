@@ -1,67 +1,106 @@
-# Plan de Optimización SEO y Metadatos para YouTube (KINESIO - Volumen 2)
+# Plan de Optimización SEO y Metadatos para YouTube (KINESIO - Ecosistema Completo)
 ## Canal: DOMINUSBABEL (@dominus8735)
 ## Campaña: Rebajas de Verano de Steam 2026
 
-Este documento contiene los títulos optimizados, descripciones ricas en palabras clave, etiquetas recomendadas y marcas de tiempo para el video largo de análisis horizontal y los cinco nuevos Shorts verticales (Volumen 2).
-
 ---
 
-## 🎥 1. Video Horizontal: Men of War: Assault Squad 2 (Análisis y Recomendación)
-* **Duración estimada:** ~7:49 minutos.
-* **Propósito:** Atraer a entusiastas de la estrategia táctica e impulsar las suscripciones al canal recomendando la compra a precio reducido ($5.99 USD).
+## 🎥 1. VIDEOS HORIZONTALES (ANÁLISIS EXTENDIDOS 16:9)
 
-### 🏷️ Títulos Optimizados (Alternativas para pruebas A/B):
-*   **Opción 1 (Alta curiosidad y gancho):** Esta JOYA de la Estrategia Militar está a -80% (Y debes tenerla en Steam) 🎖️
-*   **Opción 2 (Enfoque de valor y precio):** El RTS más TÁCTICO y Realista de Steam cuesta menos de $6 en estas rebajas 💥
-*   **Opción 3 (SEO Clásico):** Men of War: Assault Squad 2 ¿Vale la pena en las Rebajas de Verano de Steam 2026?
+### 🪐 A. Dune: Spice Wars (Análisis & Recomendación)
+* **Duración estimada:** ~6:00 minutos.
+* **Nota del Canal:** **8.5 / 10** (Compra recomendada).
+* **Propósito:** Recomendar la compra táctica a mitad de precio ($14.99 USD USA / $7.99 USD LATAM).
 
-### 📝 Descripción del Video:
+#### 🏷️ Títulos Optimizados (Pruebas A/B):
+*   **Opción A/B 1:** ¿El mejor híbrido de RTS y 4X? Dune: Spice Wars al -50% en Steam 🪐
+*   **Opción A/B 2:** Por qué catorce dólares es un REGALO por Dune: Spice Wars en estas rebajas 💥
+*   **Opción A/B 3:** Dune: Spice Wars ¿Vale la pena comprarlo? | Análisis y Nota final: 8.5/10
+
+#### 📝 Descripción del Video:
 ```text
-¡Las rebajas de verano de Steam 2026 traen descuentos masivos! Hoy analizamos a fondo "Men of War: Assault Squad 2", una obra maestra de la estrategia militar en tiempo real (RTS) que se encuentra con un increíble 80% de descuento, quedando a solo $5.99 USD.
+Analizamos a fondo "Dune: Spice Wars", el espectacular RTS y 4X desarrollado por Shiro Games y Funcom, que se encuentra a mitad de precio en las rebajas de verano de Steam 2026 ($14.99 USD / $7.99 USD LATAM). 
 
-Descubre por qué su motor de físicas revolucionario, la balística precisa de proyectiles, el control directo manual de unidades, la microgestión detallada de inventario individual y su espectacular comunidad de modificaciones (mods en Steam Workshop) lo convierten en una compra obligatoria para cualquier amante del género.
+Evaluamos su fidelidad visual al universo de Frank Herbert, su mística banda sonora y su profunda jugabilidad que equilibra economía, espionaje y combates territoriales mientras vigilas que un gusano de arena gigante no trague tus cosechadores.
 
-¿Cuál es tu modificación favorita de Men of War? ¡Déjalo abajo en los comentarios!
+Le asignamos una calificación final justificada de 8.5 / 10. ¡No encuentro fallas en su lógica!
 
 📌 Capítulos del Video:
-0:00 - Introducción y Oferta de Verano
-1:30 - Físicas de Combate y Cobertura Degradable
-3:30 - Daño de Componentes de Blindados e Inventario
-5:45 - Modificaciones (Workshop) y Campaña Cooperativa
-8:00 - Conclusión: ¿Vale la pena comprarlo?
+0:00 - Introducción y Oferta del Desierto
+1:15 - Fidelidad Visual y Diseño Artístico
+2:45 - Diseño Sonoro y Ambientación Mística
+4:00 - Mecánicas de Juego y Estrategia Híbrida (4X + RTS)
+5:10 - Rejugabilidad, Facciones y mods
+5:50 - Veredicto Final: Nota 8.5/10
 
-#menofwar #rts #estrategiamilitar #rebajassteam2026 #juegosdeestrategia #pcgaming #steam #dominus8735
+#dunespicewars #rts #estrategia #dune #gamingpc #rebajassteam #dominus8735
 ```
-
-### 🏷️ Etiquetas (Tags):
-`Men of War Assault Squad 2, Men of War AS2 espanol, rebajas de verano steam 2026, mejores juegos estrategia pc, RTS tactico realista, control directo men of war, mejores mods men of war, juegos de guerra pc baratos, estrategia militar tiempo real, dominus8735, gameplays de estrategia`
 
 ---
 
-## 📱 2. Shorts Verticales (Volumen 2)
-Cada Short incluye un título optimizado de alto impacto y una descripción corta para el algoritmo de YouTube Shorts.
+### ⚔️ B. Pathfinder: Wrath of the Righteous (Análisis & Recomendación)
+* **Duración estimada:** ~5:00 minutos.
+* **Nota del Canal:** **9.0 / 10** (Compra obligatoria).
+* **Propósito:** Recomendar este pilar del rol clásico con un 75% de descuento ($9.99 USD USA / $4.99 USD LATAM).
 
-### 🗺️ Short 1: Juegos de Mundo Abierto
-*   **Título:** ¡5 Mundos Abiertos con REBAJAS INCREÍBLES en Steam 2026! 🗺️ #shorts
-*   **Descripción:** ¡Explora mundos masivos sin vaciar tu cartera! Repasamos los mejores mundos abiertos rebajados en la Steam Summer Sale 2026: Red Dead Redemption 2 (-67%), GTA V (-63%), Rust (-50%), Subnautica (-50%) y Terraria (-50%). ¿Cuál vas a explorar? Suscríbete a @dominus8735 para más recomendaciones.
-*   **Etiquetas:** `mundos abiertos steam, mejores juegos mundo abierto pc, red dead redemption 2 oferta, gta v steam 2026, subnautica rebaja`
+#### 🏷️ Títulos Optimizados (Pruebas A/B):
+*   **Opción A/B 1:** La OBRA MAESTRA del rol clásico que cuesta menos de diez dólares en Steam ⚔️
+*   **Opción A/B 2:** Olvídate de Baldur's Gate 3 por un momento: Pathfinder WotR está a -75% 💥
+*   **Opción A/B 3:** Pathfinder: Wrath of the Righteous ¿La compra definitiva de rol? (Nota: 9.0/10)
 
-### 🏎️ Short 2: Juegos de Conducción
-*   **Título:** ¡TOP 5 Juegos de Conducción tirados de precio en Steam! 🏎️ #shorts
-*   **Descripción:** ¡Siente la adrenalina y quema llanta! Consigue estos juegazos de carreras en las rebajas de verano de Steam 2026: Forza Horizon 5 (-50%), Assetto Corsa (-80%), Need for Speed Unbound (-90%), Euro Truck Simulator 2 (-75%) y Wreckfest (-90%). ¿Cuál vas a pilotar? Suscríbete a @dominus8735 para contenido de velocidad y simulación.
-*   **Etiquetas:** `juegos de coches steam, forza horizon 5 oferta, assetto corsa simulador, nfs unbound barato, wreckfest choque`
+#### 📝 Descripción del Video:
+```text
+¿Buscando un pozo de rol infinito de más de cien horas? Hoy analizamos "Pathfinder: Wrath of the Righteous" en las Rebajas de Verano de Steam 2026 con un setenta y cinco por ciento de descuento ($9.99 USD / $4.99 USD LATAM).
 
-### 🏆 Short 3: Juegos de Deportes
-*   **Título:** ¡Los mejores Juegos de Deportes con hasta -90% en Steam! 🏆 #shorts
-*   **Descripción:** ¡Lleva la competencia al máximo! Estas son las mejores ofertas en simuladores deportivos en las rebajas de Steam 2026: EA SPORTS FC 24 (-80%), Riders Republic (-90%), Golf With Your Friends (-67%), Football Manager 2024 (-50%) y PGA TOUR 2K23 (-75%). ¿Cuál será tu próximo trofeo? Comenta y suscríbete a @dominus8735.
-*   **Etiquetas:** `juegos de deportes pc, ea sports fc 24 steam, football manager 2024 rebaja, riders republic barato, golf con amigos`
+Evaluamos su compleja adaptación de reglas de mesa, su banda sonora épica y su espectacular sistema de Senderos Míticos (Lich, Ángel, Demonio, Eón, etc.) que alteran drásticamente el rumbo de la campaña contra el abismo.
 
-### 🍳 Short 4: Juegos de Cocina
-*   **Título:** ¡TOP 5 Juegos de Cocina Caóticos en Oferta (Steam 2026)! 🍳 #shorts
-*   **Descripción:** ¡Prepara tus mejores recetas! Gestión culinaria y caos cooperativo al mejor precio en las rebajas de verano de Steam 2026: Overcooked! 2 (-75%), PlateUp! (-70%), Cooking Simulator (-60%), Overcooked! All You Can Eat (-60%) y Good Pizza, Great Pizza (-40%). ¿Qué plato cocinarás primero? Suscríbete a @dominus8735.
-*   **Etiquetas:** `juegos de cocina cooperativos, overcooked 2 steam, plateup simulador, cooking simulator pc, pizza gratis pc`
+Le otorgamos una nota justificada de 9.0 / 10. ¡Stonks total!
 
-### 👑 Short 5: Juegos de Estrategia 4X
-*   **Título:** ¡5 Colosos de la Estrategia 4X con REBAJA HISTÓRICA! 🪐 #shorts
-*   **Descripción:** ¡Conquista el cosmos y domina la historia! Los gigantes del 4X y la gran estrategia en oferta en Steam 2026: Civilization VI (-90%), Stellaris (-75%), Hearts of Iron IV (-80%), Age of Wonders 4 (-50%) y Endless Space 2 (-75%). ¿Cuál imperio alzarás? Comenta abajo y suscríbete a @dominus8735.
-*   **Etiquetas:** `estrategia 4X pc, civilization vi barato, stellaris galaxia, hearts of iron iv mapa, age of wonders 4 oferta`
+📌 Capítulos del Video:
+0:00 - Introducción y la Cruzada Demoníaca
+1:05 - Fidelidad Visual y Ambientación Isométrica
+2:15 - Diseño Sonoro y Banda Sonora Épica
+3:20 - Mecánicas de Rol Complejas y Combate Táctico
+4:20 - Rejugabilidad e Infinitos Caminos Míticos
+4:55 - Veredicto Final: Nota 9.0/10
+
+#pathfinder #wotr #rpg #crpg #rol #juegosderol #steam #dominus8735
+```
+
+---
+
+## 📱 2. SHORTS COMPARATIVOS DE PRECIOS (VOLUMEN 3)
+
+### 📱 Short 1: Just Cause 2
+* **Título:** ¡Caos absoluto por un dólar en Steam Summer Sale! 💥 #shorts
+* **Descripción:** Rico Rodríguez y Just Cause 2 están casi gratis en las rebajas de verano 2026. Desglose regional de precios: USA $2.24 | EUR 2,24 € | LATAM $1.19 (Precio Regional). ¿Listo para enganchar militares a tanques? Suscríbete a @dominus8735.
+* **Etiquetas:** `just cause 2, sandbox pc, ofertas steam 2026, juegos baratos pc`
+
+### 📱 Short 2: Just Cause 3
+* **Título:** ¡Just Cause 3 está a precio regalado (-85% en Steam)! 🚀 #shorts
+* **Descripción:** Vuela a ras del suelo en traje aéreo y desata explosiones en Médici. Comparación de precios: USA $2.99 | EUR 2,99 € | LATAM $1.49. ¡Suscríbete a @dominus8735 para más ofertas de destrucción!
+* **Etiquetas:** `just cause 3, wingsuit gameplay, steam sale 2026, juegos accion pc`
+
+### 📱 Short 3: Age of Empires II: Definitive Edition
+* **Título:** ¡El rey del RTS medieval está a MITAD DE PRECIO! 👑 #shorts
+* **Descripción:** Reúne tus caballeros y catapultas en Age of Empires II DE. Precios de oferta: USA $9.99 | EUR 9,99 € | LATAM $4.99. ¡Únete a la batalla y suscríbete a @dominus8735!
+* **Etiquetas:** `age of empires 2 de, rts medieval, estrategia pc, ofertas steam`
+
+### 📱 Short 4: Mount & Blade: Warband
+* **Título:** ¡Forja tu propio imperio medieval con MODS infinitos! 🛡️ #shorts
+* **Descripción:** Conquista Calradia o juega en Poniente en Mount & Blade: Warband. Precios: USA $4.99 | EUR 4,99 € | LATAM $2.49. El juego definitivo de simulación de ejércitos. ¡Suscríbete a @dominus8735!
+* **Etiquetas:** `mount and blade warband, mods medieval, rol tactico, rebajas pc`
+
+### 📱 Short 5: Diplomacy is Not an Option
+* **Título:** ¿Sobrevivirás a miles de enemigos en tu castillo? 🏰 #shorts
+* **Descripción:** Defiende tus murallas contra hordas masivas en Diplomacy is Not an Option. Precios: USA $19.49 | EUR 19,49 € | LATAM $9.99. La diplomacia nunca fue opción. ¡Suscríbete a @dominus8735!
+* **Etiquetas:** `diplomacy is not an option, defensa de torres, estrategia pc, steam`
+
+### 📱 Short 6: Songs of Syx
+* **Título:** ¡Construye ciudades de MILES de habitantes en Steam! 🍳 #shorts
+* **Descripción:** Dirige un imperio de microgestión masiva pixel-art en Songs of Syx. Precios: USA $19.99 | EUR 19,99 € | LATAM $9.99. Una joya del género de construcción. ¡Suscríbete a @dominus8735!
+* **Etiquetas:** `songs of syx, city builder pc, simulador de colonias, ofertas steam`
+
+### 📱 Short 7: RimWorld
+* **Título:** ¡RimWorld tiene rebaja en estas Ofertas de Verano! 🪐 #shorts
+* **Descripción:** El simulador de colonias de ciencia ficción definitivo y generador de historias aleatorias. Precios: USA $27.99 | EUR 27,99 € | LATAM $13.99. ¡Sobrevive a la IA y suscríbete a @dominus8735!
+* **Etiquetas:** `rimworld, simulador colonias, estrategia de supervivencia, pc gaming`
