@@ -107,3 +107,11 @@ def draw_progress_ring(draw_img, pos, radius, progress, outline_color=(249, 115,
     x, y = pos
     bbox = [x - radius, y - radius, x + radius, y + radius]
     draw_img.arc(bbox, start=-90, end=-90 + int(360 * progress), fill=outline_color, width=width)
+
+def apply_letterbox(img, height_ratio=0.12):
+    w, h = img.size
+    draw = ImageDraw.Draw(img)
+    bar_h = int(h * height_ratio)
+    draw.rectangle([0, 0, w, bar_h], fill=(0, 0, 0, 255))
+    draw.rectangle([0, h - bar_h, w, h], fill=(0, 0, 0, 255))
+    return img
