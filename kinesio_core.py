@@ -70,3 +70,6 @@ def get_ken_burns_crop(img, width, height, progress, effect_type):
         cropped = base_img
         
     return cropped.resize((width, height), Image.Resampling.LANCZOS)
+
+def apply_vignette(draw_img, width, height, color=(0, 0, 0, 120), thickness=50):
+    draw_img.rectangle([0, 0, width, height], outline=color, width=thickness)
