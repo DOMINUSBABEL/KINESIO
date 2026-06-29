@@ -14,7 +14,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
 
-from kinesio_core import get_audio_duration, get_ken_burns_crop
+from kinesio_core import get_audio_duration, get_ken_burns_crop, draw_progress_bar
 def generate_sfx_waves():
     """Generates basic pop and whoosh wav files if they are missing."""
     if not os.path.exists(POP_SFX):
@@ -144,8 +144,7 @@ def draw_horizontal_frame(draw, width, height, title, subtitle, font_title, font
     bar_w = 1100
     bar_x = (width - bar_w) // 2
     bar_y = panel_top + 160
-    draw_img.rounded_rectangle([bar_x, bar_y, bar_x + bar_w, bar_y + 8], radius=4, fill=(30, 41, 59, 255))
-    draw_img.rounded_rectangle([bar_x, bar_y, bar_x + int(bar_w * progress), bar_y + 8], radius=4, fill=(249, 115, 22, 255))
+    draw_progress_bar(draw_img, bar_x, bar_y, bar_w, 8, progress, bg_color=(30, 41, 59, 255), fill_color=(249, 115, 22, 255))
     
     # 4. Text Layout (Title, Section Indicator, Narrative Hook)
     draw_img.text((width // 2, panel_top + 80), title, font=font_title, fill=(255, 255, 255, 255), anchor="mm")
