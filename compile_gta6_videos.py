@@ -10,7 +10,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 # Ensure UTF-8 output
 if hasattr(sys.stdout, 'reconfigure'):
-from kinesio_core import get_audio_duration, get_ken_burns_crop, draw_outlined_text
+from kinesio_core import get_audio_duration, get_ken_burns_crop, draw_outlined_text, draw_progress_bar
     sys.stdout.reconfigure(encoding='utf-8')
 
 def split_into_phrases(text):
@@ -122,10 +122,7 @@ def draw_vertical_frame(draw, width, height, title, phrase, hook, progress, font
     draw_img.text((width // 2, header_y + 75), title, font=font_bold, fill=(244, 63, 94, 255), anchor="mm") # Bright pink-red title
     
     # Progress line below header
-    bar_width = header_w
-    bar_fill = int(bar_width * progress)
-    draw_img.rounded_rectangle([header_x, header_y + header_h + 10, header_x + bar_width, header_y + header_h + 14], radius=2, fill=(30, 41, 59, 255))
-    draw_img.rounded_rectangle([header_x, header_y + header_h + 10, header_x + bar_fill, header_y + header_h + 14], radius=2, fill=(249, 115, 22, 255)) # Orange progress
+    draw_progress_bar(draw_img, header_x, header_y + header_h + 10, header_w, 4, progress, bg_color=(30, 41, 59, 255), fill_color=(249, 115, 22, 255))
     
     # 2. Main Center Box for Gameplay
     box_w = 900
