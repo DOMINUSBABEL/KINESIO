@@ -10,100 +10,8 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 # Ensure UTF-8 output
 if hasattr(sys.stdout, 'reconfigure'):
+from kinesio_core import get_audio_duration, get_ken_burns_crop, draw_outlined_text
     sys.stdout.reconfigure(encoding='utf-8')
-
-def get_ken_burns_crop(img, width, height, progress, effect_type):
-    """Applies Ken Burns effect (zoom/pan) to an image and returns the cropped frame."""
-    img_w, img_h = img.size
-    target_aspect = width / height
-    
-    if img_w / img_h > target_aspect:
-        new_w = int(img_h * target_aspect)
-        offset = (img_w - new_w) // 2
-        base_img = img.crop((offset, 0, offset + new_w, img_h))
-    else:
-        new_h = int(img_w / target_aspect)
-        offset = (img_h - new_h) // 2
-        base_img = img.crop((0, offset, img_w, offset + new_h))
-        
-    base_w, base_h = base_img.size
-    
-    if effect_type == "zoom_in":
-        scale = 1.0 + 0.12 * progress
-        scaled_w = int(base_w * scale)
-        scaled_h = int(base_h * scale)
-        scaled_img = base_img.resize((scaled_w, scaled_h), Image.Resampling.LANCZOS)
-        crop_x = (scaled_w - base_w) // 2
-        crop_y = (scaled_h - base_h) // 2
-        cropped = scaled_img.crop((crop_x, crop_y, crop_x + base_w, crop_y + base_h))
-    elif effect_type == "zoom_out":
-        scale = 1.12 - 0.12 * progress
-        scaled_w = int(base_w * scale)
-        scaled_h = int(base_h * scale)
-        scaled_img = base_img.resize((scaled_w, scaled_h), Image.Resampling.LANCZOS)
-        crop_x = (scaled_w - base_w) // 2
-        crop_y = (scaled_h - base_h) // 2
-        cropped = scaled_img.crop((crop_x, crop_y, crop_x + base_w, crop_y + base_h))
-    elif effect_type == "pan_left":
-        scaled_w = int(base_w * 1.12)
-        scaled_h = int(base_h * 1.12)
-        scaled_img = base_img.resize((scaled_w, scaled_h), Image.Resampling.LANCZOS)
-        crop_x = int((scaled_w - base_w) * progress)
-        crop_y = (scaled_h - base_h) // 2
-        cropped = scaled_img.crop((crop_x, crop_y, crop_x + base_w, crop_y + base_h))
-    elif effect_type == "pan_right":
-        scaled_w = int(base_w * 1.12)
-        scaled_h = int(base_h * 1.12)
-        scaled_img = base_img.resize((scaled_w, scaled_h), Image.Resampling.LANCZOS)
-        crop_x = int((scaled_w - base_w) * (1.0 - progress))
-        crop_y = (scaled_h - base_h) // 2
-        cropped = scaled_img.crop((crop_x, crop_y, crop_x + base_w, crop_y + base_h))
-    else:
-        cropped = base_img
-        
-    return cropped.resize((width, height), Image.Resampling.LANCZOS)
-
-
-BASE_DIR = r"C:\Users\jegom\shorts_project"
-CAPSULES_DIR = os.path.join(BASE_DIR, "capsules")
-TRAILERS_DIR = os.path.join(BASE_DIR, "trailers")
-
-BG_MUSIC_PATH = os.path.join(BASE_DIR, "music", "Severe Tire Damage.mp3") # High energy rock for GTA
-POP_SFX = os.path.join(BASE_DIR, "pop.wav")
-WHOOSH_SFX = os.path.join(BASE_DIR, "whoosh.wav")
-
-SHORTS_DATA = [
-    {
-        "key": "gta6_short_1",
-        "title": "GTA VI: LANZAMIENTO",
-        "desc": "¡GTA 6 CAMBIARÁ LA HISTORIA! 🎮",
-        "hook": "¡EL JUEGO MÁS GRANDE DE LA HISTORIA!"
-    },
-    {
-        "key": "gta6_short_2",
-        "title": "GTA VI: FILTRACIONES",
-        "desc": "¡LAS FILTRACIONES DE GTA 6! 🚨",
-        "hook": "¡EL HACKEO MÁS BRUTAL A ROCKSTAR!"
-    },
-    {
-        "key": "gta6_short_3",
-        "title": "GTA VI: RETRASOS",
-        "desc": "¿RETRASADO HASTA 2026? 📅",
-        "hook": "¡RUMORES DE RETRASO OFICIAL!"
-    },
-    {
-        "key": "gta6_short_4",
-        "title": "GTA VI: EL PRECIO",
-        "desc": "¿GTA 6 A $150 DÓLARES? 💸",
-        "hook": "¡TODA LA VERDAD SOBRE EL PRECIO!"
-    },
-    {
-        "key": "gta6_short_5",
-        "title": "GTA VI: EL CATACLISMO",
-        "desc": "EL EFECTO DESTRUCTOR DE GTA 6 💥",
-        "hook": "¡NINGÚN JUEGO QUIERE COMPETIRLE!"
-    }
-]
 
 def split_into_phrases(text):
     """Splits a paragraph into short, punchy 2-4 word phrases for dynamic subtitles."""
@@ -116,21 +24,6 @@ def split_into_phrases(text):
         phrase = re.sub(r'[¿?¡!.,]', '', phrase)
         phrases.append(phrase)
     return phrases
-
-def get_audio_duration(path):
-    if not os.path.exists(path):
-        return 0.0
-    cmd = [
-        "ffprobe", "-v", "error",
-        "-show_entries", "format=duration",
-        "-of", "default=noprint_wrappers=1:nokey=1",
-        path
-    ]
-    try:
-        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True)
-        return float(res.stdout.strip())
-    except:
-        return 0.0
 
 def create_dynamic_gameplay_sequence():
     """Cuts and stitches 6 high-action scenes from the GTA 6 trailer to make it feel alive."""
