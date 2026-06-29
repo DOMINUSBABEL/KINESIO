@@ -171,3 +171,6 @@ KINESIO cuenta con un núcleo de utilidades optimizado para procesamiento multim
 
 ### 🎬 Efectos Ken Burns y Paneo Dinámico
 El motor calcula progresiones geométricas para recortar y desplazar las imágenes de fondo en tiempo real, logrando transiciones fluidas de cámara y combatiendo la fatiga estática.
+
+### 🔊 Mezclador de Audio y SFX Avanzado
+El motor inyecta sonidos de impacto (`pop` y `whoosh`) y realiza la elusión de límites físicos de FFmpeg para bucles infinitos de audio mediante `-stream_loop -1`.
