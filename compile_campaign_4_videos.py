@@ -1,11 +1,13 @@
 import os
 import sys
 import json
+import time
+import shutil
+import subprocess
+import wave
 import math
 import struct
-import wave
-import subprocess
-import shutil
+import re
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 # Ensure UTF-8 output
@@ -21,70 +23,75 @@ BG_MUSIC_PATH = os.path.join(BASE_DIR, "background_music.mp3")
 POP_SFX = os.path.join(BASE_DIR, "pop.wav")
 WHOOSH_SFX = os.path.join(BASE_DIR, "whoosh.wav")
 
-# 7 Shorts configuration
-SHORTS_GAMES = [
+SHORTS_GAMES_CAMPAIGN_4 = [
     {
-        "key": "jc2",
-        "appid": 8190,
-        "title": "JUST CAUSE 2",
-        "normal_title": "Just Cause 2",
-        "prices": {"usa": "$2.24", "eur": "2,24 €", "latam": "$1.19"},
-        "desc": "Caos Absoluto Barato"
+        "key": "planetary_short_1",
+        "appid": 386070,
+        "title": "PLANETARY ANNIHILATION: TITANS",
+        "prices": {"usa": "$7.49", "eur": "7,49 €", "latam": "$3.74"},
+        "desc": "La Colisión Planetaria"
     },
     {
-        "key": "jc3",
-        "appid": 225540,
-        "title": "JUST CAUSE 3",
-        "normal_title": "Just Cause 3",
-        "prices": {"usa": "$2.99", "eur": "2,99 €", "latam": "$1.49"},
-        "desc": "Destrucción y Traje Aéreo"
+        "key": "planetary_short_2",
+        "appid": 386070,
+        "title": "PLANETARY ANNIHILATION: TITANS",
+        "prices": {"usa": "$7.49", "eur": "7,49 €", "latam": "$3.74"},
+        "desc": "Titanes Robóticos"
     },
     {
-        "key": "aoe2",
-        "appid": 813780,
-        "title": "AGE OF EMPIRES II DE",
-        "normal_title": "Age of Empires II: Definitive Edition",
-        "prices": {"usa": "$9.99", "eur": "9,99 €", "latam": "$4.99"},
-        "desc": "Rey del RTS Medieval"
+        "key": "planetary_short_3",
+        "appid": 386070,
+        "title": "PLANETARY ANNIHILATION: TITANS",
+        "prices": {"usa": "$7.49", "eur": "7,49 €", "latam": "$3.74"},
+        "desc": "Flujo Macroeconómico"
     },
     {
-        "key": "warband",
-        "appid": 48700,
-        "title": "MOUNT & BLADE: WARBAND",
-        "normal_title": "Mount & Blade: Warband",
-        "prices": {"usa": "$4.99", "eur": "4,99 €", "latam": "$2.49"},
-        "desc": "Rol Medieval e Infinitos Mods"
+        "key": "riftbreaker_short_1",
+        "appid": 780310,
+        "title": "THE RIFTBREAKER",
+        "prices": {"usa": "$17.99", "eur": "17,99 €", "latam": "$9.59"},
+        "desc": "El Mecha Mr. Riggs"
     },
     {
-        "key": "diplomacy",
-        "appid": 1272320,
-        "title": "DIPLOMACY IS NOT AN OPTION",
-        "normal_title": "Diplomacy is Not an Option",
-        "prices": {"usa": "$19.49", "eur": "19,49 €", "latam": "$9.99"},
-        "desc": "Sobrevive a la Horda"
+        "key": "riftbreaker_short_2",
+        "appid": 780310,
+        "title": "THE RIFTBREAKER",
+        "prices": {"usa": "$17.99", "eur": "17,99 €", "latam": "$9.59"},
+        "desc": "Construcción de Bases"
     },
     {
-        "key": "syx",
-        "appid": 1162750,
-        "title": "SONGS OF SYX",
-        "normal_title": "Songs of Syx",
-        "prices": {"usa": "$19.99", "eur": "19,99 €", "latam": "$9.99"},
-        "desc": "Mega Gestión Pixel Art"
+        "key": "riftbreaker_short_3",
+        "appid": 780310,
+        "title": "THE RIFTBREAKER",
+        "prices": {"usa": "$17.99", "eur": "17,99 €", "latam": "$9.59"},
+        "desc": "Hordas de Insectos"
     },
     {
-        "key": "rimworld",
-        "appid": 294100,
-        "title": "RIMWORLD",
-        "normal_title": "RimWorld",
-        "prices": {"usa": "$27.99", "eur": "27,99 €", "latam": "$13.99"},
-        "desc": "Simulador de Historias Emergentes"
+        "key": "wewhoare_short_1",
+        "appid": 973230,
+        "title": "WE WHO ARE ABOUT TO DIE",
+        "prices": {"usa": "$11.99", "eur": "11,99 €", "latam": "$5.99"},
+        "desc": "Físicas de Gladiador"
+    },
+    {
+        "key": "wewhoare_short_2",
+        "appid": 973230,
+        "title": "WE WHO ARE ABOUT TO DIE",
+        "prices": {"usa": "$11.99", "eur": "11,99 €", "latam": "$5.99"},
+        "desc": "Clamor del Público"
+    },
+    {
+        "key": "wewhoare_short_3",
+        "appid": 973230,
+        "title": "WE WHO ARE ABOUT TO DIE",
+        "prices": {"usa": "$11.99", "eur": "11,99 €", "latam": "$5.99"},
+        "desc": "Muerte Permanente"
     }
 ]
 
 def generate_sfx_waves():
-    """Generates Pop and Whoosh WAV files programmatically if missing."""
+    """Generates basic pop and whoosh wav files if they are missing."""
     if not os.path.exists(POP_SFX):
-        # Pop: Fast rising pitch, rapid exp decay
         obj = wave.open(POP_SFX, 'w')
         obj.setnchannels(1)
         obj.setsampwidth(2)
@@ -99,91 +106,87 @@ def generate_sfx_waves():
             data = struct.pack('<h', val)
             obj.writeframesraw(data)
         obj.close()
-
+        
     if not os.path.exists(WHOOSH_SFX):
-        # Whoosh: Sine sweep 150Hz -> 800Hz with white noise overlay, parabolic volume envelope
         obj = wave.open(WHOOSH_SFX, 'w')
         obj.setnchannels(1)
         obj.setsampwidth(2)
         obj.setframerate(44100)
-        duration = 0.8
+        duration = 0.60
         num_samples = int(duration * 44100)
-        import random
         for i in range(num_samples):
             t = i / 44100
-            freq = 150 + 650 * (t / duration)
-            vol = 4 * (t / duration) * (1 - (t / duration)) # Parabolic envelope
-            noise = random.uniform(-0.15, 0.15)
-            val = int((math.sin(2 * math.pi * freq * t) + noise) * vol * 18000)
+            freq = 80 + 350 * math.sin(math.pi * (t / duration))
+            vol = math.sin(math.pi * (t / duration))
+            val = int(math.sin(2 * math.pi * freq * t) * vol * 18000)
             data = struct.pack('<h', val)
             obj.writeframesraw(data)
         obj.close()
 
-def get_audio_duration(file_path):
+def get_audio_duration(path):
+    if not os.path.exists(path):
+        return 0.0
     cmd = [
-        "ffprobe", "-v", "error", "-show_entries", "format=duration",
-        "-of", "default=noprint_wrappers=1:nokey=1", file_path
+        "ffprobe", "-v", "error",
+        "-show_entries", "format=duration",
+        "-of", "default=noprint_wrappers=1:nokey=1",
+        path
     ]
     try:
-        result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True)
-        return float(result.stdout.strip())
+        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True)
+        return float(res.stdout.strip())
     except:
         return 0.0
 
-def get_chapter_timestamps(script_path, audio_duration):
-    """Calculates timestamps dynamically based on chapter word count proportion, handling multi-line quotes properly."""
+def get_chapter_timestamps(script_path, total_duration):
+    """Parses script.md to extract sections and dynamically computes timestamps based on word counts."""
+    if not os.path.exists(script_path):
+        return []
+        
     with open(script_path, 'r', encoding='utf-8') as f:
         content = f.read()
-    chapters = content.split("## 📌 ")
-    chapter_texts = []
-    chapter_titles = []
+        
+    chapters = content.split("### Sección ")
+    if len(chapters) < 2:
+        return []
+        
+    sections = []
+    total_words = 0
     
     for ch in chapters[1:]:
         lines = ch.split('\n')
-        title = lines[0].split(':')[1].strip() if ':' in lines[0] else lines[0].strip()
-        chapter_titles.append(title)
+        title_line = lines[0].strip()
+        title = title_line.split(":")[-1].strip() if ":" in title_line else title_line
         
-        # Extract locution robustly across multiple lines
-        audio_lines = []
-        capture = False
-        for line in lines:
+        # Clean title parentheses
+        title = re.sub(r'\([^\)]+\)', '', title).strip()
+        
+        # Find voiceover block
+        voc_text = ""
+        for i, line in enumerate(lines):
             if "Audio (Voz en off)" in line:
-                capture = True
-                idx_q = line.find('"')
-                if idx_q != -1:
-                    audio_lines.append(line[idx_q:])
-                continue
-            if capture:
-                if line.strip().startswith('*') and ("Visual" in line or "Efecto" in line or "Meme" in line):
-                    capture = False
-                else:
-                    audio_lines.append(line.strip())
+                for j in range(i+1, min(i+5, len(lines))):
+                    next_line = lines[j].strip()
+                    if next_line.startswith('"') and next_line.endswith('"'):
+                        voc_text = next_line[1:-1].strip()
+                        break
         
-        full_ch_text = " ".join(audio_lines)
-        first_q = full_ch_text.find('"')
-        last_q = full_ch_text.rfind('"')
-        if first_q != -1 and last_q != -1 and last_q > first_q:
-            loc = full_ch_text[first_q+1:last_q]
-        else:
-            loc = full_ch_text
-            
-        loc = loc.replace('**', '').replace('"', '').strip()
-        chapter_texts.append(loc)
+        words_count = len(voc_text.split())
+        total_words += words_count
+        sections.append({"title": title, "words": words_count})
         
-    word_counts = [len(text.split()) for text in chapter_texts]
-    total_words = sum(word_counts)
-    
     boundaries = []
     current_time = 0.0
-    for wc, title in zip(word_counts, chapter_titles):
-        duration = (wc / total_words) * audio_duration
-        boundaries.append((current_time, current_time + duration, title))
+    for idx, sec in enumerate(sections):
+        pct = sec["words"] / total_words if total_words > 0 else (1.0 / len(sections))
+        duration = pct * total_duration
+        boundaries.append((current_time, current_time + duration, sec["title"]))
         current_time += duration
         
     return boundaries
 
 def draw_horizontal_frame(draw, width, height, title, subtitle, font_title, font_sub, screenshot_path_or_img, progress, meme_text=None, font_meme=None):
-    # 1. Background image with slow zoom (Ken Burns) and Blur
+    # 1. Background image with static blurred background cache
     img_src = None
     if screenshot_path_or_img:
         if isinstance(screenshot_path_or_img, str):
@@ -234,42 +237,29 @@ def draw_horizontal_frame(draw, width, height, title, subtitle, font_title, font
     # Translucent glass panel
     draw_img.rounded_rectangle([panel_left, panel_top, panel_right, panel_bottom], radius=24, fill=(13, 20, 38, 210), outline=(255, 255, 255, 25), width=2)
     
-    # Glowing neon accent bar at the top of the panel
-    draw_img.rounded_rectangle([panel_left + 40, panel_top + 30, panel_right - 40, panel_top + 34], radius=2, fill=(30, 41, 59, 255))
-    bar_width = panel_w - 80
-    bar_fill = int(bar_width * progress)
-    draw_img.rounded_rectangle([panel_left + 40, panel_top + 30, panel_left + 40 + bar_fill, panel_top + 34], radius=2, fill=(249, 115, 22, 255))
+    # 3. Dynamic Progress Ring/Bar integrated elegantly
+    bar_w = 1100
+    bar_x = (width - bar_w) // 2
+    bar_y = panel_top + 160
+    draw_img.rounded_rectangle([bar_x, bar_y, bar_x + bar_w, bar_y + 8], radius=4, fill=(30, 41, 59, 255))
+    draw_img.rounded_rectangle([bar_x, bar_y, bar_x + int(bar_w * progress), bar_y + 8], radius=4, fill=(249, 115, 22, 255))
     
-    # Top Center Indicator Badge
-    badge_w = 260
-    badge_h = 42
-    badge_x = width // 2 - badge_w // 2
-    badge_y = panel_top - 20
-    draw_img.rounded_rectangle([badge_x, badge_y, badge_x + badge_w, badge_y + badge_h], radius=8, fill=(249, 115, 22, 255), outline=(255, 255, 255, 255), width=2)
-    draw_img.text((width // 2, badge_y + badge_h // 2), "RECOMENDACIÓN", font=font_meme if font_meme else font_sub, fill=(255, 255, 255, 255), anchor="mm")
+    # 4. Text Layout (Title, Section Indicator, Narrative Hook)
+    draw_img.text((width // 2, panel_top + 80), title, font=font_title, fill=(255, 255, 255, 255), anchor="mm")
     
-    # Draw Title
-    draw_img.text((width // 2, panel_top + 110), title, font=font_title, fill=(255, 255, 255, 255), anchor="mm")
-    # Subtitle separator line
-    draw_img.line([width // 2 - 150, panel_top + 175, width // 2 + 150, panel_top + 175], fill=(249, 115, 22, 120), width=2)
+    # Section indicator
+    draw_img.text((width // 2, bar_y + 50), subtitle, font=font_sub, fill=(249, 115, 22, 255), anchor="mm")
     
-    # Wrap subtitle
-    words = subtitle.split()
-    lines = []
-    curr = []
-    for w in words:
-        if len(" ".join(curr + [w])) < 55:
-            curr.append(w)
-        else:
-            lines.append(" ".join(curr))
-            curr = [w]
-    if curr:
-        lines.append(" ".join(curr))
-        
-    y_offset = panel_top + 230
-    for line in lines:
-        draw_img.text((width // 2, y_offset), line, font=font_sub, fill=(215, 225, 245, 255), anchor="mm")
-        y_offset += 60
+    # Core review points
+    bullet_y = bar_y + 120
+    bullets = [
+        "✔   Estética y Apartado Técnico Premium",
+        "✔   Mecánicas, Jugabilidad y Diseño Sonoro",
+        "✔   Rejugabilidad e Informe de Compra Oficial"
+    ]
+    for b in bullets:
+        draw_img.text((width // 2, bullet_y), b, font=font_sub, fill=(200, 210, 230, 255), anchor="mm")
+        bullet_y += 65
         
     # Meme overlay popups: Styled as a clean floating cartoon sticker!
     if meme_text and font_meme:
@@ -291,7 +281,7 @@ def draw_horizontal_frame(draw, width, height, title, subtitle, font_title, font
         
     return img_bg.convert("RGB")
 
-def compile_horizontal_video(appid, game_name, prefix, output_path, script_path, audio_path):
+def compile_horizontal_video(appid, game_name, prefix, output_path, script_path, audio_path, custom_subtitle):
     print(f"\nCompiling Horizontal Video: {game_name}")
     audio_dur = get_audio_duration(audio_path)
     if audio_dur == 0.0:
@@ -311,6 +301,18 @@ def compile_horizontal_video(appid, game_name, prefix, output_path, script_path,
     trailer_file = os.path.join(TRAILERS_DIR, f"{prefix}_trailer.mp4")
     trailer_dur = get_audio_duration(trailer_file) if os.path.exists(trailer_file) else 0.0
     
+    # Pre-load all 10 screenshots to avoid disk I/O in the loop and enable rotation!
+    loaded_screenshots = []
+    for i in range(10):
+        ss_path = os.path.join(SCREENSHOTS_DIR, f"{prefix}_screenshot_{i}.jpg")
+        if os.path.exists(ss_path):
+            try:
+                loaded_screenshots.append(Image.open(ss_path))
+            except:
+                pass
+    if not loaded_screenshots:
+        print(f"  [WARNING] No screenshots found for {prefix}, rendering will fall back to solid background.")
+        
     segment_files = []
     
     # 6 Chapters
@@ -344,26 +346,30 @@ def compile_horizontal_video(appid, game_name, prefix, output_path, script_path,
             frame_dir = os.path.join(temp_dir, f"frames_{idx}")
             os.makedirs(frame_dir, exist_ok=True)
             
-            # Select screenshot
-            ss_file = os.path.join(SCREENSHOTS_DIR, f"{prefix}_screenshot_{idx % 10}.jpg")
             total_frames = int(dur * 30)
             
             # Memes definitions
             meme = None
-            if "cállate y toma mi dinero" in title.lower() or "cómpralo" in title.lower() or "comprar" in title.lower():
+            if "cómpralo" in title.lower() or "comprar" in title.lower() or "espectacular" in title.lower():
                 meme = "STONKS 📈"
-            elif "falla" in title.lower() or "veredicto" in title.lower():
+            elif "falla" in title.lower() or "veredicto" in title.lower() or "obligatoria" in title.lower():
                 meme = "GIGACHAD 😎"
-            elif "gratis" in title.lower() or "solari" in title.lower() or "descuento" in title.lower():
+            elif "gratis" in title.lower() or "descuento" in title.lower() or "precio" in title.lower():
                 meme = "OFERTAZO 💸"
                 
-            # Pre-load screenshot image
-            img_src = Image.open(ss_file) if os.path.exists(ss_file) else None
             for f_idx in range(total_frames):
                 progress = f_idx / total_frames
+                
+                # Rotate background screenshot every 600 frames (20 seconds) for variety!
+                if loaded_screenshots:
+                    ss_idx = (idx * 3 + (f_idx // 600)) % len(loaded_screenshots)
+                    img_src = loaded_screenshots[ss_idx]
+                else:
+                    img_src = None
+                    
                 frame_img = draw_horizontal_frame(
                     None, width, height, title.upper(),
-                    f"Sección {idx + 1}: Analizando mecánicas, fidelidad y rejugabilidad de la cruzada en Arrakis.",
+                    f"Sección {idx + 1}: {custom_subtitle}",
                     font_title, font_sub, img_src, progress,
                     meme_text=meme if progress > 0.4 else None, font_meme=font_meme
                 )
@@ -383,8 +389,7 @@ def compile_horizontal_video(appid, game_name, prefix, output_path, script_path,
         if os.path.exists(seg_video) and os.path.getsize(seg_video) > 0:
             segment_files.append(seg_video)
             
-    # Concatenate video segments using the concat filter to decode and re-encode,
-    # ensuring identical timebase, headers, and codecs across mismatched streams.
+    # Concatenate video segments using the concat filter
     raw_video = os.path.join(temp_dir, "raw_video.mp4")
     concat_inputs = []
     filter_concat_parts = []
@@ -447,16 +452,15 @@ def compile_horizontal_video(appid, game_name, prefix, output_path, script_path,
         else:
             audio_mix_filter += "[speech]anull[a]"
             
-    # Compile final video (copy video stream, encode audio to prevent lengthy re-encoding!)
+    # Compile final video
     cmd_final = ["ffmpeg", "-y"]
     cmd_final.extend(audio_inputs)
     cmd_final.extend([
         "-filter_complex", audio_mix_filter,
         "-map", "0:v",
         "-map", "[a]",
-        "-c:v", "copy", # FAST MIXING
+        "-c:v", "copy",
         "-c:a", "aac",
-        "-movflags", "+faststart",
         "-shortest",
         output_path
     ])
@@ -475,7 +479,7 @@ def compile_horizontal_video(appid, game_name, prefix, output_path, script_path,
         print(f"  [SUCCESS] Horizonal video generated at {output_path}")
 
 def draw_vertical_frame(draw, width, height, title, desc, prices, progress, font_title, font_sub, font_bold, capsule_path_or_img):
-    # 1. Background image with motion zoom (Ken Burns) and Blur
+    # 1. Background image with slow zoom and Blur
     img_src = None
     if capsule_path_or_img:
         if isinstance(capsule_path_or_img, str):
@@ -486,145 +490,185 @@ def draw_vertical_frame(draw, width, height, title, desc, prices, progress, font
 
     if img_src:
         if not hasattr(draw_vertical_frame, "bg_cache") or draw_vertical_frame.bg_cache_src != img_src:
-            bg_scale = 1.075
+            bg_scale = 1.12
             bg_w = int(width * bg_scale)
             bg_h = int(height * bg_scale)
             img_bg_static = img_src.resize((bg_w, bg_h))
             crop_x = (bg_w - width) // 2
             crop_y = (bg_h - height) // 2
             img_bg_static = img_bg_static.crop((crop_x, crop_y, crop_x + width, crop_y + height))
-            img_bg_static = img_bg_static.filter(ImageFilter.GaussianBlur(30))
+            img_bg_static = img_bg_static.filter(ImageFilter.GaussianBlur(15))
             overlay = Image.new("RGBA", (width, height), (8, 12, 24, 180))
             draw_vertical_frame.bg_cache = Image.alpha_composite(img_bg_static.convert("RGBA"), overlay)
             draw_vertical_frame.bg_cache_src = img_src
         img_bg = draw_vertical_frame.bg_cache.copy()
     else:
-        img_bg = Image.new("RGBA", (width, height), (10, 15, 30, 255))
+        img_bg = Image.new("RGBA", (width, height), (13, 20, 38, 255))
         
     draw_img = ImageDraw.Draw(img_bg)
     
-    # Subtle vignette border (darkened edges)
-    draw_img.rectangle([0, 0, width, height], outline=(0, 0, 0, 100), width=40)
+    # Vignette overlay
+    draw_img.rectangle([0, 0, width, height], outline=(0, 0, 0, 150), width=60)
     
-    # 2. Modern Glassmorphism Header Bar (Translucent backdrop with thin white border)
-    draw_img.rounded_rectangle([40, 45, width-40, 155], radius=16, fill=(13, 20, 38, 220), outline=(255, 255, 255, 30), width=2)
-    draw_img.text((width // 2, 75), "OFERTAS DE VERANO", font=font_bold, fill=(255, 255, 255, 255), anchor="mm")
-    draw_img.text((width // 2, 118), "STEAM SUMMER SALE 2026", font=font_sub, fill=(249, 115, 22, 255), anchor="mm")
+    # Top Header
+    header_w = 900
+    header_h = 100
+    header_x = (width - header_w) // 2
+    header_y = 60
+    draw_img.rounded_rectangle([header_x, header_y, header_x + header_w, header_y + header_h], radius=15, fill=(13, 20, 38, 210), outline=(255, 255, 255, 25), width=2)
+    draw_img.text((width // 2, header_y + 30), "REBAJAS DE VERANO STEAM", font=font_sub, fill=(255, 255, 255, 255), anchor="mm")
+    draw_img.text((width // 2, header_y + 70), "RECOMENDACIÓN REGIONAL", font=font_bold, fill=(249, 115, 22, 255), anchor="mm")
     
-    # Progress Bar: modern neon indicator line below header
-    bar_width = width - 120
+    # Bottom progress indicator
+    bar_width = header_w
     bar_fill = int(bar_width * progress)
-    draw_img.rounded_rectangle([60, 175, width-60, 181], radius=3, fill=(30, 41, 59, 255))
-    draw_img.rounded_rectangle([60, 175, 60 + bar_fill, 181], radius=3, fill=(249, 115, 22, 255))
+    draw_img.rounded_rectangle([header_x, header_y + header_h + 10, header_x + bar_width, header_y + header_h + 14], radius=2, fill=(30, 41, 59, 255))
+    draw_img.rounded_rectangle([header_x, header_y + header_h + 10, header_x + bar_fill, header_y + header_h + 14], radius=2, fill=(249, 115, 22, 255))
     
-    # Phase 1: Intro (0.0 to 0.25 progress)
+    # Dynamic content based on temporal progress
     if progress < 0.25:
-        # Elastic Scale Intro: Zoom in with smooth ease out
-        t = progress / 0.25
-        scale = 0.5 + 0.55 * (1.0 - (1.0 - t)**3)
-        cap_w = int(540 * scale)
-        cap_h = int(810 * scale)
+        # State A: Title & Description
+        card_w = 900
+        card_h = 750
+        card_x = (width - card_w) // 2
+        card_y = 350
         
-        img_cap_src = None
-        if capsule_path_or_img:
-            if isinstance(capsule_path_or_img, str):
-                if os.path.exists(capsule_path_or_img):
-                    img_cap_src = Image.open(capsule_path_or_img)
+        # Sombra de tarjeta
+        s_mask = Image.new("L", (card_w + 30, card_h + 30), 0)
+        ImageDraw.Draw(s_mask).rounded_rectangle([15, 15, card_w + 15, card_h + 15], radius=20, fill=160)
+        s_blur = s_mask.filter(ImageFilter.GaussianBlur(10))
+        s_color = Image.new("RGBA", (card_w + 30, card_h + 30), (0, 0, 0, 200))
+        img_bg.paste(s_color, (card_x - 15, card_y - 15), mask=s_blur)
+        
+        draw_img.rounded_rectangle([card_x, card_y, card_x + card_w, card_y + card_h], radius=20, fill=(13, 20, 38, 220), outline=(255, 255, 255, 30), width=2)
+        
+        # Display capsule art with shadow inside the card
+        if img_src:
+            cap_img = img_src.resize((360, 540))
+            # Round capsule corners
+            mask = Image.new("L", (360, 540), 0)
+            ImageDraw.Draw(mask).rounded_rectangle([0, 0, 360, 540], radius=15, fill=255)
+            cap_x = card_x + 60
+            cap_y = card_y + 100
+            
+            c_shadow = Image.new("L", (380, 560), 0)
+            ImageDraw.Draw(c_shadow).rounded_rectangle([10, 10, 370, 550], radius=15, fill=180)
+            c_blur = c_shadow.filter(ImageFilter.GaussianBlur(10))
+            img_bg.paste(Image.new("RGBA", (380, 560), (0,0,0,180)), (cap_x - 10, cap_y - 10), mask=c_blur)
+            
+            img_bg.paste(cap_img, (cap_x, cap_y), mask=mask)
+            # Border around capsule
+            draw_img.rounded_rectangle([cap_x, cap_y, cap_x + 360, cap_y + 540], radius=15, outline=(255, 255, 255, 100), width=3)
+            
+        # Text details
+        text_x = card_x + 460
+        draw_img.text((text_x, card_y + 220), "ANÁLISIS FLASH", font=font_bold, fill=(249, 115, 22, 255))
+        
+        # Wrap title
+        t_words = title.split()
+        t_lines = []
+        curr = []
+        for w in t_words:
+            if len(" ".join(curr + [w])) < 16:
+                curr.append(w)
             else:
-                img_cap_src = capsule_path_or_img
-
-        if img_cap_src:
-            img_cap = img_cap_src.resize((cap_w, cap_h))
+                t_lines.append(" ".join(curr))
+                curr = [w]
+        if curr:
+            t_lines.append(" ".join(curr))
             
-            # Draw Drop Shadow behind capsule (creates professional depth)
-            shadow_offset = 12
-            shadow_mask = Image.new("L", (cap_w + 30, cap_h + 30), 0)
-            ImageDraw.Draw(shadow_mask).rounded_rectangle([10, 10, cap_w + 10, cap_h + 10], radius=24, fill=120)
-            shadow_blur = shadow_mask.filter(ImageFilter.GaussianBlur(15))
-            shadow_color = Image.new("RGBA", (cap_w + 30, cap_h + 30), (0, 0, 0, 200))
-            img_bg.paste(shadow_color, (((width - cap_w) // 2) - 10 + shadow_offset, 280 - 10 + shadow_offset), mask=shadow_blur)
+        ty = card_y + 290
+        for l in t_lines:
+            draw_img.text((text_x, ty), l, font=font_title, fill=(255, 255, 255, 255))
+            ty += 60
             
-            # Mask rounded corners for Capsule
-            mask = Image.new("L", (cap_w, cap_h), 0)
-            ImageDraw.Draw(mask).rounded_rectangle([0, 0, cap_w, cap_h], radius=24, fill=255)
-            img_bg.paste(img_cap, ((width - cap_w) // 2, 280), mask=mask)
-            
-            # Glowing border around capsule
-            draw_img.rounded_rectangle([((width - cap_w) // 2) - 1, 279, ((width - cap_w) // 2) + cap_w + 1, 280 + cap_h + 1], radius=24, outline=(249, 115, 22, 200), width=3)
-            
-        # Text block with glassmorphism backdrop
-        draw_img.rounded_rectangle([60, 1180, width-60, 1370], radius=20, fill=(13, 20, 38, 200), outline=(255, 255, 255, 20), width=2)
-        draw_img.text((width // 2, 1240), title, font=font_bold, fill=(255, 255, 255, 255), anchor="mm")
-        draw_img.text((width // 2, 1310), desc.upper(), font=font_sub, fill=(249, 115, 22, 255), anchor="mm")
+        draw_img.text((text_x, ty + 20), desc, font=font_sub, fill=(156, 163, 175, 255))
         
-    # Phase 2: Gameplay & Price comparison (0.25 to 0.75 progress)
     elif progress < 0.75:
-        # Curated screen mockup frame for gameplay clip!
-        box_w = 920
-        box_h = 518
+        # State B: Gameplay Video frame (Render placeholder/frame overlay)
+        box_w = 900
+        box_h = 506
         box_x = (width - box_w) // 2
-        box_y = 280
+        box_y = 350
         
-        # Monitor outer bezel
-        draw_img.rounded_rectangle([box_x - 8, box_y - 8, box_x + box_w + 8, box_y + box_h + 8], radius=16, fill=None, outline=(30, 41, 59, 255), width=8)
-        # Glowing inner neon accent
-        draw_img.rounded_rectangle([box_x - 3, box_y - 3, box_x + box_w + 3, box_y + box_h + 3], radius=12, fill=None, outline=(249, 115, 22, 255), width=3)
+        # Draw dynamic monitor bezels
+        draw_img.rounded_rectangle([box_x - 15, box_y - 15, box_x + box_w + 15, box_y + box_h + 15], radius=16, fill=(17, 24, 39, 255), outline=(249, 115, 22, 255), width=3)
+        draw_img.rectangle([box_x, box_y, box_x + box_w, box_y + box_h], fill=(0, 0, 0, 255))
         
-        # Comparative prices list inside sleek glass cards
-        panel_y = 860
-        # Main glass panel container
-        draw_img.rounded_rectangle([50, panel_y, width-50, panel_y + 350], radius=24, fill=(10, 15, 30, 210), outline=(255, 255, 255, 30), width=2)
-        draw_img.text((width // 2, panel_y + 40), "PRECIOS COMPARATIVOS", font=font_bold, fill=(249, 115, 22, 255), anchor="mm")
+        # Title of the game overlayed nicely at the bottom of the screen
+        card_w = 900
+        card_h = 420
+        card_x = (width - card_w) // 2
+        card_y = 900
         
-        # USA Price Pill
-        draw_img.rounded_rectangle([70, panel_y + 80, width-70, panel_y + 150], radius=12, fill=(20, 27, 48, 180), outline=(255, 255, 255, 10), width=1)
-        draw_img.text((100, panel_y + 115), "🇺🇸  ESTADOS UNIDOS (USA)", font=font_sub, fill=(200, 210, 230, 255), anchor="lm")
-        draw_img.text((width - 100, panel_y + 115), prices["usa"], font=font_bold, fill=(255, 255, 255, 255), anchor="rm")
+        # Background shadow for comparative prices card
+        s_mask = Image.new("L", (card_w + 30, card_h + 30), 0)
+        ImageDraw.Draw(s_mask).rounded_rectangle([15, 15, card_w + 15, card_h + 15], radius=20, fill=160)
+        s_blur = s_mask.filter(ImageFilter.GaussianBlur(10))
+        img_bg.paste(Image.new("RGBA", (card_w + 30, card_h + 30), (0, 0, 0, 200)), (card_x - 15, card_y - 15), mask=s_blur)
         
-        # EUR Price Pill
-        draw_img.rounded_rectangle([70, panel_y + 165, width-70, panel_y + 235], radius=12, fill=(20, 27, 48, 180), outline=(255, 255, 255, 10), width=1)
-        draw_img.text((100, panel_y + 200), "🇪🇺  EUROPA (EUR)", font=font_sub, fill=(200, 210, 230, 255), anchor="lm")
-        draw_img.text((width - 100, panel_y + 200), prices["eur"], font=font_bold, fill=(255, 255, 255, 255), anchor="rm")
+        draw_img.rounded_rectangle([card_x, card_y, card_x + card_w, card_y + card_h], radius=20, fill=(13, 20, 38, 220), outline=(255, 255, 255, 25), width=2)
         
-        # LATAM Region Price Pill (Highlight: green card!)
-        draw_img.rounded_rectangle([70, panel_y + 250, width-70, panel_y + 320], radius=12, fill=(16, 40, 32, 200), outline=(34, 197, 94, 80), width=2)
-        draw_img.text((100, panel_y + 285), "🌎  LATINOAMÉRICA (REG)", font=font_sub, fill=(187, 247, 208, 255), anchor="lm")
-        draw_img.text((width - 100, panel_y + 285), prices["latam"], font=font_bold, fill=(34, 197, 94, 255), anchor="rm")
+        # Prices layout inside the glass panel
+        draw_img.text((width // 2, card_y + 40), "PRECIOS REGIONALES", font=font_bold, fill=(249, 115, 22, 255), anchor="mm")
         
-    # Phase 3: Outro CTA (0.75 to 1.0 progress)
+        # USA Price Row
+        usa_y = card_y + 110
+        draw_img.rounded_rectangle([card_x + 40, usa_y, card_x + card_w - 40, usa_y + 70], radius=10, fill=(20, 27, 48, 180), outline=(255, 255, 255, 10), width=1)
+        draw_img.text((card_x + 70, usa_y + 35), "🇺🇸  ESTADOS UNIDOS (USA)", font=font_sub, fill=(200, 210, 230, 255), anchor="lm")
+        draw_img.text((card_x + card_w - 70, usa_y + 35), prices["usa"], font=font_bold, fill=(255, 255, 255, 255), anchor="rm")
+        
+        # EUR Price Row
+        eur_y = card_y + 200
+        draw_img.rounded_rectangle([card_x + 40, eur_y, card_x + card_w - 40, eur_y + 70], radius=10, fill=(20, 27, 48, 180), outline=(255, 255, 255, 10), width=1)
+        draw_img.text((card_x + 70, eur_y + 35), "🇪🇺  EUROPA (EUR)", font=font_sub, fill=(200, 210, 230, 255), anchor="lm")
+        draw_img.text((card_x + card_w - 70, eur_y + 35), prices["eur"], font=font_bold, fill=(255, 255, 255, 255), anchor="rm")
+        
+        # LATAM Regional Price Row (Highlighted green)
+        lat_y = card_y + 290
+        draw_img.rounded_rectangle([card_x + 40, lat_y, card_x + card_w - 40, lat_y + 90], radius=12, fill=(16, 40, 32, 200), outline=(34, 197, 94, 80), width=2)
+        draw_img.text((card_x + 70, lat_y + 45), "🌎  LATINOAMÉRICA (REG)", font=font_sub, fill=(187, 247, 208, 255), anchor="lm")
+        draw_img.text((card_x + card_w - 70, lat_y + 45), prices["latam"], font=font_bold, fill=(34, 197, 94, 255), anchor="rm")
+        
     else:
-        # Subscribe Panel and Branding
-        draw_img.rounded_rectangle([80, 400, width-80, 1400], radius=24, fill=(13, 20, 38, 220), outline=(249, 115, 22, 100), width=2)
+        # State C: Call to Action Subscribe Panel
+        card_w = 900
+        card_h = 1000
+        card_x = (width - card_w) // 2
+        card_y = 350
         
-        # Giant pulsing YouTube logo or similar shape
-        logo_y = 580
-        draw_img.rounded_rectangle([width//2 - 60, logo_y - 40, width//2 + 60, logo_y + 40], radius=15, fill=(239, 68, 68, 255))
-        # Draw play triangle inside logo
-        draw_img.polygon([(width//2 - 15, logo_y - 20), (width//2 - 15, logo_y + 20), (width//2 + 20, logo_y)], fill=(255, 255, 255, 255))
+        # Shadows and panels
+        s_mask = Image.new("L", (card_w + 30, card_h + 30), 0)
+        ImageDraw.Draw(s_mask).rounded_rectangle([15, 15, card_w + 15, card_h + 15], radius=24, fill=160)
+        s_blur = s_mask.filter(ImageFilter.GaussianBlur(10))
+        img_bg.paste(Image.new("RGBA", (card_w + 30, card_h + 30), (0, 0, 0, 200)), (card_x - 15, card_y - 15), mask=s_blur)
         
-        # Channel name
-        draw_img.text((width // 2, 700), "@dominus8735", font=font_bold, fill=(255, 255, 255, 255), anchor="mm")
-        draw_img.text((width // 2, 760), "ANÁLISIS & RECOMENDACIONES", font=font_sub, fill=(200, 210, 230, 255), anchor="mm")
+        draw_img.rounded_rectangle([card_x, card_y, card_x + card_w, card_y + card_h], radius=24, fill=(13, 20, 38, 220), outline=(249, 115, 22, 100), width=2)
         
-        # Pulsing CTA Subscribe button
-        pulse = 1.0 + 0.05 * math.sin(progress * 25)
-        btn_w = int(640 * pulse)
-        btn_h = int(130 * pulse)
+        # Giant red play button
+        logo_y = 560
+        draw_img.rounded_rectangle([width//2 - 90, logo_y - 60, width//2 + 90, logo_y + 60], radius=20, fill=(239, 68, 68, 255))
+        draw_img.polygon([(width//2 - 25, logo_y - 30), (width//2 - 25, logo_y + 30), (width//2 + 35, logo_y)], fill=(255, 255, 255, 255))
+        
+        # Channel name and labels
+        draw_img.text((width // 2, 740), "@dominus8735", font=font_bold, fill=(255, 255, 255, 255), anchor="mm")
+        draw_img.text((width // 2, 810), "ANÁLISIS & RECOMENDACIONES", font=font_sub, fill=(200, 210, 230, 255), anchor="mm")
+        
+        # Red pulsing subscribe button
+        btn_w = 400
+        btn_h = 90
         btn_x = (width - btn_w) // 2
-        btn_y = 950
+        btn_y = 920
         
-        # Draw Drop Shadow behind button
         btn_shadow = Image.new("L", (btn_w + 20, btn_h + 20), 0)
         ImageDraw.Draw(btn_shadow).rounded_rectangle([5, 5, btn_w + 5, btn_h + 5], radius=16, fill=150)
         btn_blur = btn_shadow.filter(ImageFilter.GaussianBlur(10))
-        btn_shadow_color = Image.new("RGBA", (btn_w + 20, btn_h + 20), (0, 0, 0, 180))
-        img_bg.paste(btn_shadow_color, (btn_x - 5, btn_y - 5), mask=btn_blur)
+        img_bg.paste(Image.new("RGBA", (btn_w + 20, btn_h + 20), (0,0,0,180)), (btn_x - 5, btn_y - 5), mask=btn_blur)
         
-        # Red pulsing subscribe button
         draw_img.rounded_rectangle([btn_x, btn_y, btn_x + btn_w, btn_y + btn_h], radius=16, fill=(239, 68, 68, 255), outline=(255, 255, 255, 255), width=4)
         draw_img.text((width // 2, btn_y + btn_h // 2), "SUSCRÍBETE", font=font_bold, fill=(255, 255, 255, 255), anchor="mm")
         
-        draw_img.text((width // 2, 1200), "🔔 Activa la campanita para más ofertas", font=font_sub, fill=(249, 115, 22, 255), anchor="mm")
+        draw_img.text((width // 2, 1120), "🔔 Activa la campanita para más ofertas", font=font_sub, fill=(249, 115, 22, 255), anchor="mm")
         
     return img_bg.convert("RGB")
 
@@ -635,12 +679,12 @@ def compile_vertical_short(game):
     prices = game["prices"]
     desc = game["desc"]
     
-    output_path = os.path.join(BASE_DIR, f"{key}_v3_short.mp4")
+    output_path = os.path.join(BASE_DIR, f"{key}_v4_short.mp4")
     audio_path = os.path.join(BASE_DIR, f"audio_{key}.mp3")
     trailer_path = os.path.join(TRAILERS_DIR, f"trailer_{appid}.mp4")
     capsule_path = os.path.join(CAPSULES_DIR, f"capsule_{appid}.jpg")
     
-    print(f"\nCompiling Vertical Short: {title}")
+    print(f"\nCompiling Vertical Short: {title} ({key})")
     audio_dur = get_audio_duration(audio_path)
     if audio_dur == 0.0:
         print(f"  [ERROR] Audio file missing or empty: {audio_path}")
@@ -656,6 +700,7 @@ def compile_vertical_short(game):
     
     total_frames = int(audio_dur * 30)
     img_capsule = Image.open(capsule_path) if os.path.exists(capsule_path) else None
+    
     for f_idx in range(total_frames):
         progress = f_idx / total_frames
         frame_img = draw_vertical_frame(
@@ -675,21 +720,20 @@ def compile_vertical_short(game):
     ]
     subprocess.run(cmd_base, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     
-    # Overlay gameplay video in central box during 0.25 to 0.75 progress
-    final_video_only = os.path.join(temp_dir, "video_only.mp4")
-    trailer_dur = get_audio_duration(trailer_path) if os.path.exists(trailer_path) else 0.0
-    
-    if trailer_dur > 15.0:
+    # Overlay gameplay video in the center box for state B (0.25 to 0.75 progress)
+    trailer_dur = get_audio_duration(trailer_path)
+    if trailer_dur > 5.0:
+        final_video_only = os.path.join(temp_dir, "final_video_only.mp4")
         start_t = 0.25 * audio_dur
         end_t = 0.75 * audio_dur
         overlay_dur = end_t - start_t
         
-        # Crop/slice gameplay segment
+        # Sliced gameplay clip to overlay
         gameplay_clip = os.path.join(temp_dir, "gameplay_clip.mp4")
         cmd_slice = [
             "ffmpeg", "-y",
             "-stream_loop", "-1",
-            "-ss", f"{10.0:.2f}",
+            "-ss", "5.00",
             "-i", trailer_path,
             "-t", f"{overlay_dur:.2f}",
             "-vf", "scale=900:506:force_original_aspect_ratio=decrease,pad=900:506:(ow-iw)/2:(oh-ih)/2,setsar=1",
@@ -698,7 +742,6 @@ def compile_vertical_short(game):
         ]
         subprocess.run(cmd_slice, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         
-        # Overlay gameplay_clip over base_video
         cmd_overlay = [
             "ffmpeg", "-y",
             "-i", base_video,
@@ -712,7 +755,7 @@ def compile_vertical_short(game):
     else:
         final_video_only = base_video
         
-    # Audio track assembly: mix voiceover, pop SFX (at 0.25 and 0.75), whoosh SFX (at start and end), and background music
+    # Audio track assembly: mix voiceover, pop SFX, whoosh SFX, and background music
     audio_inputs = ["-i", final_video_only, "-i", audio_path]
     audio_mix_filter = "[1:a]volume=1.0[speech];"
     
@@ -727,7 +770,6 @@ def compile_vertical_short(game):
         w_idx = 4 if use_bg else 3
         audio_inputs.extend(["-i", POP_SFX, "-i", WHOOSH_SFX])
         
-        # Split pop and whoosh
         audio_mix_filter += (
             f"[{p_idx}:a]asplit=2[p0][p1];"
             f"[{w_idx}:a]asplit=2[w0][w1];"
@@ -747,21 +789,20 @@ def compile_vertical_short(game):
         else:
             audio_mix_filter += "[speech]anull[a]"
             
-    # Final render
     cmd_final = ["ffmpeg", "-y"]
     cmd_final.extend(audio_inputs)
     cmd_final.extend([
         "-filter_complex", audio_mix_filter,
         "-map", "0:v",
         "-map", "[a]",
-        "-c:v", "copy" if final_video_only != base_video else "libx264", # fast mix if possible
+        "-c:v", "copy" if final_video_only != base_video else "libx264",
         "-c:a", "aac",
+        "-movflags", "+faststart",
         "-shortest",
         output_path
     ])
     res = subprocess.run(cmd_final, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     
-    # Cleanup temp
     try:
         shutil.rmtree(temp_dir)
     except:
@@ -775,49 +816,45 @@ def compile_vertical_short(game):
 
 def main():
     print("====================================================")
-    print("KINESIO Render Engine v3 (Horizontal & Regional Shorts)")
+    print("KINESIO Render Engine Campaign 4 Suite")
     print("====================================================")
     
     generate_sfx_waves()
     
-    # 1. Compile long videos
-    # compile_horizontal_video(
-    #     1184370, "Pathfinder Wrath of the Righteous", "pathfinder_wrath_of_the_righteous",
-    #     os.path.join(BASE_DIR, "pathfinder_wrath_of_the_righteous_analysis.mp4"),
-    #     os.path.join(BASE_DIR, "script_pathfinder.md"),
-    #     os.path.join(BASE_DIR, "audio_pathfinder.mp3")
-    # )
-
-    # compile_horizontal_video(
-    #     400750, "Call to Arms Gates of Hell Ostfront", "gates_of_hell",
-    #     os.path.join(BASE_DIR, "gates_of_hell_analysis.mp4"),
-    #     os.path.join(BASE_DIR, "script_gates_of_hell.md"),
-    #     os.path.join(BASE_DIR, "audio_gates_of_hell.mp3")
-    # )
-
-    # compile_horizontal_video(
-    #     774241, "Warhammer Chaosbane", "chaosbane",
-    #     os.path.join(BASE_DIR, "chaosbane_analysis.mp4"),
-    #     os.path.join(BASE_DIR, "script_chaosbane.md"),
-    #     os.path.join(BASE_DIR, "audio_chaosbane.mp3")
-    # )
-
-    # compile_horizontal_video(
-    #     826630, "Iron Harvest", "iron_harvest",
-    #     os.path.join(BASE_DIR, "iron_harvest_analysis.mp4"),
-    #     os.path.join(BASE_DIR, "script_iron_harvest.md"),
-    #     os.path.join(BASE_DIR, "audio_iron_harvest.mp3")
-    # )
+    # 1. Compile long horizontal videos
+    compile_horizontal_video(
+        386070, "Planetary Annihilation: TITANS", "planetary",
+        os.path.join(BASE_DIR, "planetary_analysis.mp4"),
+        os.path.join(BASE_DIR, "script_planetary.md"),
+        os.path.join(BASE_DIR, "audio_planetary.mp3"),
+        "Combatiendo por el control y la supervivencia en sistemas estelares."
+    )
+    
+    compile_horizontal_video(
+        780310, "The Riftbreaker", "riftbreaker",
+        os.path.join(BASE_DIR, "riftbreaker_analysis.mp4"),
+        os.path.join(BASE_DIR, "script_riftbreaker.md"),
+        os.path.join(BASE_DIR, "audio_riftbreaker.mp3"),
+        "Colonizando y defendiendo Galatea 37 a bordo del mecha Mr. Riggs."
+    )
+    
+    compile_horizontal_video(
+        973230, "We Who Are About To Die", "wewhoare",
+        os.path.join(BASE_DIR, "wewhoare_analysis.mp4"),
+        os.path.join(BASE_DIR, "script_wewhoare.md"),
+        os.path.join(BASE_DIR, "audio_wewhoare.mp3"),
+        "Luchando por la gloria y la libertad en la despiadada arena de Teronis."
+    )
     
     # 2. Compile Shorts
-    for game in SHORTS_GAMES:
+    for game in SHORTS_GAMES_CAMPAIGN_4:
         try:
             compile_vertical_short(game)
         except Exception as e:
-            print(f"  [ERROR] Failed to compile Short for {game['title']}: {e}")
+            print(f"  [ERROR] Failed to compile Short for {game['title']} ({game['key']}): {e}")
             
     print("\n====================================================")
-    print("All compilations and renders completed!")
+    print("Campaign 4 rendering suite completed!")
     print("====================================================")
 
 if __name__ == "__main__":

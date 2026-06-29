@@ -78,7 +78,7 @@ def main():
         if ss_count < 10: has_errors = True
         
         # Check audio
-        audio_file = os.path.join(BASE_DIR, f"audio_{prefix if prefix == 'dune_spice_wars' else 'pathfinder'}.mp3")
+        audio_file = os.path.join(BASE_DIR, f"audio_{'dune' if prefix == 'dune_spice_wars' else 'pathfinder'}.mp3")
         aud_ok, aud_status = check_file(audio_file)
         aud_dur = get_duration(audio_file) if aud_ok else None
         report.append(f"*   **Audio TTS Locución:** {'✔️' if aud_ok else '❌'} {aud_status} {f'({aud_dur:.2f} s)' if aud_dur else ''}")

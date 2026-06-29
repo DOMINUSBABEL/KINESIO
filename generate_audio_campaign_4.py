@@ -11,22 +11,27 @@ if hasattr(sys.stdout, 'reconfigure'):
 BASE_DIR = r"C:\Users\jegom\shorts_project"
 
 # Input files
-SCRIPT_DUNE = os.path.join(BASE_DIR, "script_dune.md")
-SCRIPT_PATHFINDER = os.path.join(BASE_DIR, "script_pathfinder.md")
-SCRIPT_SHORTS = os.path.join(BASE_DIR, "scripts_shorts_v3.md")
+SCRIPT_PLANETARY = os.path.join(BASE_DIR, "script_planetary.md")
+SCRIPT_RIFTBREAKER = os.path.join(BASE_DIR, "script_riftbreaker.md")
+SCRIPT_WEWHOARE = os.path.join(BASE_DIR, "script_wewhoare.md")
+SCRIPT_SHORTS = os.path.join(BASE_DIR, "scripts_shorts_campaign_4.md")
 
-# Output files
-AUDIO_DUNE = os.path.join(BASE_DIR, "audio_dune.mp3")
-AUDIO_PATHFINDER = os.path.join(BASE_DIR, "audio_pathfinder.mp3")
+# Output files for horizontal videos
+AUDIO_PLANETARY = os.path.join(BASE_DIR, "audio_planetary.mp3")
+AUDIO_RIFTBREAKER = os.path.join(BASE_DIR, "audio_riftbreaker.mp3")
+AUDIO_WEWHOARE = os.path.join(BASE_DIR, "audio_wewhoare.mp3")
 
-SHORTS_AUDIO_MAPPING = {
-    "jc2": (os.path.join(BASE_DIR, "audio_jc2.mp3"), "Just Cause 2"),
-    "jc3": (os.path.join(BASE_DIR, "audio_jc3.mp3"), "Just Cause 3"),
-    "aoe2": (os.path.join(BASE_DIR, "audio_aoe2.mp3"), "Age of Empires II: Definitive Edition"),
-    "warband": (os.path.join(BASE_DIR, "audio_warband.mp3"), "Mount & Blade: Warband"),
-    "diplomacy": (os.path.join(BASE_DIR, "audio_diplomacy.mp3"), "Diplomacy is Not an Option"),
-    "syx": (os.path.join(BASE_DIR, "audio_syx.mp3"), "Songs of Syx"),
-    "rimworld": (os.path.join(BASE_DIR, "audio_rimworld.mp3"), "RimWorld")
+# Shorts mappings
+SHORTS_MAPPING = {
+    "planetary_short_1": os.path.join(BASE_DIR, "audio_planetary_short_1.mp3"),
+    "planetary_short_2": os.path.join(BASE_DIR, "audio_planetary_short_2.mp3"),
+    "planetary_short_3": os.path.join(BASE_DIR, "audio_planetary_short_3.mp3"),
+    "riftbreaker_short_1": os.path.join(BASE_DIR, "audio_riftbreaker_short_1.mp3"),
+    "riftbreaker_short_2": os.path.join(BASE_DIR, "audio_riftbreaker_short_2.mp3"),
+    "riftbreaker_short_3": os.path.join(BASE_DIR, "audio_riftbreaker_short_3.mp3"),
+    "wewhoare_short_1": os.path.join(BASE_DIR, "audio_wewhoare_short_1.mp3"),
+    "wewhoare_short_2": os.path.join(BASE_DIR, "audio_wewhoare_short_2.mp3"),
+    "wewhoare_short_3": os.path.join(BASE_DIR, "audio_wewhoare_short_3.mp3"),
 }
 
 def extract_long_locution(file_path):
@@ -47,36 +52,23 @@ def extract_long_locution(file_path):
                     break
     return " ".join(locution_parts)
 
-def extract_short_locution(file_path, title_token):
-    """Extracts all Audio locutions for a specific Short in the v3 script robustly."""
+def extract_short_locution_v4(file_path, key_token):
+    """Extracts all Audio locutions for a specific Short in the v4 script robustly using regex."""
     if not os.path.exists(file_path):
         return ""
     with open(file_path, 'r', encoding='utf-8') as f:
         content = f.read()
         
-    sections = content.split("## 📱 Short ")
-    target_section = None
-    for sec in sections:
-        # Check if the title matches
-        first_line = sec.strip().split('\n')[0].strip()
-        if title_token.lower() in first_line.lower():
-            target_section = sec
-            break
-            
-    if not target_section:
+    pattern = r"Key:\s*" + re.escape(key_token)
+    parts = re.split(pattern, content)
+    if len(parts) < 2:
         return ""
-        
-    locution_parts = []
-    lines = target_section.split('\n')
-    for i, line in enumerate(lines):
-        if "Locución" in line:
-            # Check if quote is on the same line or next line
-            combined = " ".join(lines[i:i+3])
-            match = re.search(r'\"([^\"]+)\"', combined)
-            if match:
-                locution_parts.append(match.group(1).strip())
-                
-    return " ".join(locution_parts)
+    
+    block = parts[1]
+    match = re.search(r'\"([^\"]{30,})\"', block)
+    if match:
+        return match.group(1).strip().replace('\n', ' ')
+    return ""
 
 async def generate_tts(text, output_path, rate_pct):
     """Invokes edge-tts command line to generate audio track."""
@@ -107,32 +99,33 @@ async def generate_tts(text, output_path, rate_pct):
 
 async def main():
     print("====================================================")
-    print("TTS Voice Generator v3 (KINESIO Multiformat)")
+    print("TTS Voice Generator (Campaign 4 Multiformat)")
     print("====================================================")
     
     tasks = []
     
-    # 1. Long-form Dune: Spice Wars
-    print("Extracting Dune: Spice Wars locution...")
-    text_dune = extract_long_locution(SCRIPT_DUNE)
-    print(f"  Dune word count: {len(text_dune.split())} words")
-    if text_dune:
-        tasks.append(generate_tts(text_dune, AUDIO_DUNE, 5)) # +5%
-        
-    # 2. Long-form Pathfinder
-    print("Extracting Pathfinder: Wrath of the Righteous locution...")
-    text_pathfinder = extract_long_locution(SCRIPT_PATHFINDER)
-    print(f"  Pathfinder word count: {len(text_pathfinder.split())} words")
-    if text_pathfinder:
-        tasks.append(generate_tts(text_pathfinder, AUDIO_PATHFINDER, 0)) # +0%
-        
-    # 3. The 7 Shorts
-    for key, (path, title) in SHORTS_AUDIO_MAPPING.items():
-        print(f"Extracting Short '{title}' locution...")
-        short_text = extract_short_locution(SCRIPT_SHORTS, title)
+    # 1. Horizontal Videos (rate = +0% for natural pacing and >10 min duration)
+    horizontal_scripts = [
+        (SCRIPT_PLANETARY, AUDIO_PLANETARY, "Planetary Annihilation"),
+        (SCRIPT_RIFTBREAKER, AUDIO_RIFTBREAKER, "The Riftbreaker"),
+        (SCRIPT_WEWHOARE, AUDIO_WEWHOARE, "We Who Are About To Die")
+    ]
+    
+    for script_path, audio_path, name in horizontal_scripts:
+        print(f"Extracting {name} locution...")
+        text = extract_long_locution(script_path)
+        print(f"  {name} word count: {len(text.split())} words")
+        if text:
+            tasks.append(generate_tts(text, audio_path, 0)) # +0% normal speed
+            
+    # 2. Shorts (rate = +0% or slightly faster if needed, we'll keep at +0% to make them pacing 45-70s)
+    # At 150-180 words, +0% speed rate is perfect to get exactly 50-70 seconds.
+    for key, path in SHORTS_MAPPING.items():
+        print(f"Extracting Short '{key}' locution...")
+        short_text = extract_short_locution_v4(SCRIPT_SHORTS, key)
         print(f"  Short '{key}' word count: {len(short_text.split())} words")
         if short_text:
-            tasks.append(generate_tts(short_text, path, 28)) # +28%
+            tasks.append(generate_tts(short_text, path, 0)) # +0% normal speed
             
     if not tasks:
         print("[WARNING] No locution text extracted. Verify script files are present.")

@@ -85,7 +85,7 @@ async def main():
     print(f"  Iron Harvest word count: {len(text_ih.split())} words")
     
     if text_ih:
-        success = await generate_tts(text_ih, AUDIO_IRON_HARVEST, 5) # +5%
+        success = await generate_tts(text_ih, AUDIO_IRON_HARVEST, 0) # +0%
         if success:
             print("[INFO] Audio generated successfully!")
         else:

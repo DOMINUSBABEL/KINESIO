@@ -90,14 +90,14 @@ async def main():
     text_goh = extract_long_locution(SCRIPT_GATES_OF_HELL)
     print(f"  Gates of Hell word count: {len(text_goh.split())} words")
     if text_goh:
-        tasks.append(generate_tts(text_goh, AUDIO_GATES_OF_HELL, 5)) # +5%
+        tasks.append(generate_tts(text_goh, AUDIO_GATES_OF_HELL, 0)) # +0%
         
     # 2. Chaosbane
     print("Extracting Chaosbane locution...")
     text_cb = extract_long_locution(SCRIPT_CHAOSBANE)
     print(f"  Chaosbane word count: {len(text_cb.split())} words")
     if text_cb:
-        tasks.append(generate_tts(text_cb, AUDIO_CHAOSBANE, 5)) # +5%
+        tasks.append(generate_tts(text_cb, AUDIO_CHAOSBANE, 0)) # +0%
         
     if not tasks:
         print("[WARNING] No locution text extracted. Verify script files are present.")

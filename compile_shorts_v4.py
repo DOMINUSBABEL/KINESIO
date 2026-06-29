@@ -105,20 +105,30 @@ def get_audio_duration(file_path):
     except:
         return 0.0
 
-def draw_vertical_frame(draw, width, height, title, desc, prices, progress, font_title, font_sub, font_bold, capsule_path):
+def draw_vertical_frame(draw, width, height, title, desc, prices, progress, font_title, font_sub, font_bold, capsule_path_or_img):
     # 1. Background image with slow zoom and Blur
-    if os.path.exists(capsule_path):
-        img_src = Image.open(capsule_path)
-        bg_scale = 1.10 + 0.05 * progress
-        bg_w = int(width * bg_scale)
-        bg_h = int(height * bg_scale)
-        img_bg = img_src.resize((bg_w, bg_h))
-        crop_x = (bg_w - width) // 2
-        crop_y = (bg_h - height) // 2
-        img_bg = img_bg.crop((crop_x, crop_y, crop_x + width, crop_y + height))
-        img_bg = img_bg.filter(ImageFilter.GaussianBlur(15))
-        overlay = Image.new("RGBA", (width, height), (8, 12, 24, 180))
-        img_bg = Image.alpha_composite(img_bg.convert("RGBA"), overlay)
+    img_src = None
+    if capsule_path_or_img:
+        if isinstance(capsule_path_or_img, str):
+            if os.path.exists(capsule_path_or_img):
+                img_src = Image.open(capsule_path_or_img)
+        else:
+            img_src = capsule_path_or_img
+
+    if img_src:
+        if not hasattr(draw_vertical_frame, "bg_cache") or draw_vertical_frame.bg_cache_src != img_src:
+            bg_scale = 1.12
+            bg_w = int(width * bg_scale)
+            bg_h = int(height * bg_scale)
+            img_bg_static = img_src.resize((bg_w, bg_h))
+            crop_x = (bg_w - width) // 2
+            crop_y = (bg_h - height) // 2
+            img_bg_static = img_bg_static.crop((crop_x, crop_y, crop_x + width, crop_y + height))
+            img_bg_static = img_bg_static.filter(ImageFilter.GaussianBlur(15))
+            overlay = Image.new("RGBA", (width, height), (8, 12, 24, 180))
+            draw_vertical_frame.bg_cache = Image.alpha_composite(img_bg_static.convert("RGBA"), overlay)
+            draw_vertical_frame.bg_cache_src = img_src
+        img_bg = draw_vertical_frame.bg_cache.copy()
     else:
         img_bg = Image.new("RGBA", (width, height), (13, 20, 38, 255))
         
@@ -160,8 +170,16 @@ def draw_vertical_frame(draw, width, height, title, desc, prices, progress, font
         draw_img.rounded_rectangle([card_x, card_y, card_x + card_w, card_y + card_h], radius=20, fill=(13, 20, 38, 220), outline=(255, 255, 255, 30), width=2)
         
         # Display capsule art with shadow inside the card
-        if os.path.exists(capsule_path):
-            cap_img = Image.open(capsule_path).resize((360, 540))
+        img_cap_src = None
+        if capsule_path_or_img:
+            if isinstance(capsule_path_or_img, str):
+                if os.path.exists(capsule_path_or_img):
+                    img_cap_src = Image.open(capsule_path_or_img)
+            else:
+                img_cap_src = capsule_path_or_img
+
+        if img_cap_src:
+            cap_img = img_cap_src.resize((360, 540))
             # Round capsule corners
             mask = Image.new("L", (360, 540), 0)
             ImageDraw.Draw(mask).rounded_rectangle([0, 0, 360, 540], radius=15, fill=255)
@@ -238,19 +256,19 @@ def draw_vertical_frame(draw, width, height, title, desc, prices, progress, font
         # USA Pill
         draw_img.rounded_rectangle([px, py, px + pill_w, py + pill_h], radius=12, fill=(30, 41, 59, 180), outline=(255, 255, 255, 20), width=1)
         draw_img.text((px + 30, py + 22), "🇺🇸 USA (Precio Base):", font=font_sub, fill=(243, 244, 246, 255))
-        draw_img.text((px + pill_w - 30, py + 22), prices["usa"], font=font_bold, fill=(255, 255, 255, 255), anchor="ne")
+        draw_img.text((px + pill_w - 30, py + 22), prices["usa"], font=font_bold, fill=(255, 255, 255, 255), anchor="rt")
         
         # EUR Pill
         py += 95
         draw_img.rounded_rectangle([px, py, px + pill_w, py + pill_h], radius=12, fill=(30, 41, 59, 180), outline=(255, 255, 255, 20), width=1)
         draw_img.text((px + 30, py + 22), "🇪🇺 EUR (Europa):", font=font_sub, fill=(243, 244, 246, 255))
-        draw_img.text((px + pill_w - 30, py + 22), prices["eur"], font=font_bold, fill=(255, 255, 255, 255), anchor="ne")
+        draw_img.text((px + pill_w - 30, py + 22), prices["eur"], font=font_bold, fill=(255, 255, 255, 255), anchor="rt")
         
         # LATAM Pill
         py += 95
         draw_img.rounded_rectangle([px, py, px + pill_w, py + pill_h], radius=12, fill=(13, 148, 136, 180), outline=(255, 255, 255, 30), width=1)
         draw_img.text((px + 30, py + 22), "🌎 LATAM (Ajuste Regional):", font=font_sub, fill=(204, 251, 241, 255))
-        draw_img.text((px + pill_w - 30, py + 22), prices["latam"], font=font_bold, fill=(52, 211, 153, 255), anchor="ne")
+        draw_img.text((px + pill_w - 30, py + 22), prices["latam"], font=font_bold, fill=(52, 211, 153, 255), anchor="rt")
         
     else:
         # State C: Outro & Call to Action (CTA)
@@ -332,10 +350,11 @@ def compile_vertical_short(game):
     font_sub = ImageFont.truetype("C:\\Windows\\Fonts\\segoeui.ttf", 32)
     
     total_frames = int(audio_dur * 30)
+    img_capsule = Image.open(capsule_path) if os.path.exists(capsule_path) else None
     for f_idx in range(total_frames):
         progress = f_idx / total_frames
         frame_img = draw_vertical_frame(
-            None, width, height, title, desc, prices, progress, font_title, font_sub, font_bold, capsule_path
+            None, width, height, title, desc, prices, progress, font_title, font_sub, font_bold, img_capsule
         )
         frame_img.save(os.path.join(temp_dir, f"frame_{f_idx:05d}.jpg"), quality=90)
         
@@ -349,7 +368,7 @@ def compile_vertical_short(game):
         "-t", f"{audio_dur:.2f}",
         base_video
     ]
-    subprocess.run(cmd_base, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    subprocess.run(cmd_base, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     
     # Overlay gameplay video in central box during 0.25 to 0.75 progress
     final_video_only = os.path.join(temp_dir, "video_only.mp4")
@@ -366,6 +385,7 @@ def compile_vertical_short(game):
         # Slice gameplay starting 10s into the trailer
         cmd_slice = [
             "ffmpeg", "-y",
+            "-stream_loop", "-1",
             "-ss", f"{10.0:.2f}",
             "-i", trailer_path,
             "-t", f"{overlay_dur:.2f}",
@@ -373,7 +393,7 @@ def compile_vertical_short(game):
             "-c:v", "libx264", "-pix_fmt", "yuv420p", "-an",
             gameplay_clip
         ]
-        subprocess.run(cmd_slice, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        subprocess.run(cmd_slice, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         
         # Overlay gameplay_clip over base_video
         cmd_overlay = [
@@ -385,7 +405,7 @@ def compile_vertical_short(game):
             "-c:v", "libx264", "-pix_fmt", "yuv420p",
             final_video_only
         ]
-        subprocess.run(cmd_overlay, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        subprocess.run(cmd_overlay, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     else:
         final_video_only = base_video
         
@@ -395,13 +415,13 @@ def compile_vertical_short(game):
     
     use_bg = os.path.exists(BG_MUSIC_PATH)
     if use_bg:
-        audio_inputs.extend(["-i", BG_MUSIC_PATH])
-        audio_mix_filter += "[2:a]volume=-22dB,aloop=loop=-1:size=3e7[bg_music];"
+        audio_inputs.extend(["-stream_loop", "-1", "-i", BG_MUSIC_PATH])
+        audio_mix_filter += "[2:a]volume=-22dB[bg_music];"
         
     sfx_available = os.path.exists(POP_SFX) and os.path.exists(WHOOSH_SFX)
     if sfx_available:
-        p_idx = len(audio_inputs) // 2
-        w_idx = p_idx + 1
+        p_idx = 3 if use_bg else 2
+        w_idx = 4 if use_bg else 3
         audio_inputs.extend(["-i", POP_SFX, "-i", WHOOSH_SFX])
         
         audio_mix_filter += (
@@ -431,16 +451,22 @@ def compile_vertical_short(game):
         "-map", "[a]",
         "-c:v", "copy" if final_video_only != base_video else "libx264",
         "-c:a", "aac",
+        "-movflags", "+faststart",
         "-shortest",
         output_path
     ])
-    subprocess.run(cmd_final, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    res = subprocess.run(cmd_final, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     
     try:
         shutil.rmtree(temp_dir)
     except:
         pass
-    print(f"  [SUCCESS] Vertical Short compiled at {output_path}")
+        
+    if res.returncode != 0:
+        print(f"  [ERROR] FFmpeg failed with exit code {res.returncode}")
+        print(res.stderr.decode('utf-8', errors='ignore'))
+    else:
+        print(f"  [SUCCESS] Vertical Short compiled at {output_path}")
 
 def main():
     print("====================================================")
