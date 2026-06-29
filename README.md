@@ -165,3 +165,6 @@ Este proyecto ha sido desarrollado bajo los estándares de ingeniería de softwa
 *   **Empresa Desarrolladora:** [BABYLON.IA](https://babylonias.com)
 
 KINESIO es una marca registrada de **BABYLON.IA** y su arquitectura agéntica de video se distribuye bajo la licencia MIT.
+
+## ⚙️ Ecosistema Core (kinesio_core.py)
+KINESIO cuenta con un núcleo de utilidades optimizado para procesamiento multimedia en memoria. Este módulo encapsula las funciones matemáticas de redimensionado, efectos de difuminado y generación de barras de progreso dinámicas.
