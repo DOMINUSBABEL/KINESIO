@@ -80,3 +80,11 @@ def draw_glass_panel(draw_img, x, y, w, h, radius=24, fill=(13, 20, 38, 210), ou
 def apply_color_grading(img, color=(251, 115, 22, 15)):
     overlay = Image.new("RGBA", img.size, color)
     return Image.alpha_composite(img.convert("RGBA"), overlay).convert("RGB")
+
+def draw_outlined_text(draw_img, pos, text, font, text_color=(255, 255, 255, 255), outline_color=(0, 0, 0, 255), thickness=3, anchor="mm"):
+    x, y = pos
+    for dx in range(-thickness, thickness + 1):
+        for dy in range(-thickness, thickness + 1):
+            if dx != 0 or dy != 0:
+                draw_img.text((x + dx, y + dy), text, font=font, fill=outline_color, anchor=anchor)
+    draw_img.text((x, y), text, font=font, fill=text_color, anchor=anchor)
