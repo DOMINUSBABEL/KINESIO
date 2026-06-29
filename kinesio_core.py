@@ -95,3 +95,6 @@ def build_ffmpeg_slice_cmd(in_file, out_file, ss, t, filter_str=None):
         cmd.extend(["-vf", filter_str])
     cmd.extend(["-c:v", "libx264", "-pix_fmt", "yuv420p", "-an", out_file])
     return cmd
+
+def build_audio_mix_filter(speech_vol="1.0", bg_vol="-24dB"):
+    return f"[1:a]volume={speech_vol}[speech];[2:a]volume={bg_vol}[bg_music];[speech][bg_music]amix=inputs=2:normalize=0[a]"
