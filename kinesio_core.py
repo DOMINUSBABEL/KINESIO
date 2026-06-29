@@ -1,7 +1,7 @@
 import os
 import sys
 import subprocess
-from PIL import Image, ImageDraw, ImageFilter
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 def log_info(msg):
     print(f"[KINESIO CORE] {msg}")
@@ -116,12 +116,162 @@ def apply_letterbox(img, height_ratio=0.12):
     draw.rectangle([0, h - bar_h, w, h], fill=(0, 0, 0, 255))
     return img
 
-# KINESIO Core fully optimized for 4K60 and 1080p30 rendering pipelines.
-
 def load_safe_font(font_path, size):
     try:
         return ImageFont.truetype(font_path, size)
     except:
         return ImageFont.load_default()
 
+class KinesioVideoBuilder:
+    """Generalized orchestration engine to compile any type of widescreen essays or vertical shorts."""
+    def __init__(self, project_name, width=1920, height=1080, fps=30):
+        self.project_name = project_name
+        self.width = width
+        self.height = height
+        self.fps = fps
+        self.scenes = []
+        self.bg_music = None
+        self.bg_music_vol = -24
+        self.sfx_tracks = []
+        
+    def add_scene(self, title, duration, asset_path=None, template="default", effect_type="zoom_in", gameplay_overlay=None):
+        self.scenes.append({
+            "title": title,
+            "duration": duration,
+            "asset_path": asset_path,
+            "template": template,
+            "effect_type": effect_type,
+            "gameplay_overlay": gameplay_overlay
+        })
+        
+    def set_background_music(self, path, volume=-24):
+        self.bg_music = path
+        self.bg_music_vol = volume
+        
+    def add_sfx(self, path, delay_seconds, volume=-6):
+        self.sfx_tracks.append({
+            "path": path,
+            "delay": delay_seconds,
+            "volume": volume
+        })
+        
+    def build(self, output_path, voice_audio_path=None):
+        log_info(f"Building generalized video project: {self.project_name}")
+        temp_dir = f"temp_builder_{self.project_name}"
+        os.makedirs(temp_dir, exist_ok=True)
+        
+        segment_files = []
+        for idx, sc in enumerate(self.scenes):
+            seg_file = os.path.join(temp_dir, f"scene_{idx:02d}.mp4")
+            dur = sc["duration"]
+            title = sc["title"]
+            asset = sc["asset_path"]
+            effect = sc["effect_type"]
+            overlay = sc["gameplay_overlay"]
+            
+            # If gameplay overlay is present, slice and scale
+            if overlay and os.path.exists(overlay):
+                cmd_slice = build_ffmpeg_slice_cmd(overlay, seg_file, 0.0, dur)
+                subprocess.run(cmd_slice, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            else:
+                # Render slides dynamically
+                frame_dir = os.path.join(temp_dir, f"frames_{idx}")
+                os.makedirs(frame_dir, exist_ok=True)
+                total_frames = int(dur * self.fps)
+                
+                img_asset = Image.open(asset) if asset and os.path.exists(asset) else None
+                font_title = load_safe_font("C:\\Windows\\Fonts\\segoeuib.ttf", 55 if self.width > self.height else 40)
+                font_sub = load_safe_font("C:\\Windows\\Fonts\\segoeui.ttf", 32 if self.width > self.height else 26)
+                
+                for f_idx in range(total_frames):
+                    progress = f_idx / total_frames
+                    
+                    if img_asset:
+                        frame_img = get_ken_burns_crop(img_asset, self.width, self.height, progress, effect)
+                        frame_img = frame_img.filter(ImageFilter.GaussianBlur(15))
+                    else:
+                        frame_img = Image.new("RGB", (self.width, self.height), (15, 20, 35))
+                        
+                    draw = ImageDraw.Draw(frame_img)
+                    apply_vignette(draw, self.width, self.height)
+                    
+                    # Draw title card panel
+                    if self.width > self.height: # Widescreen
+                        draw_glass_panel(draw, self.width//2 - 600, self.height//2 - 200, 1200, 400)
+                        draw_outlined_text(draw, (self.width//2, self.height//2 - 50), title.upper(), font_title)
+                        draw_progress_bar(draw, self.width//2 - 500, self.height//2 + 80, 1000, 8, progress)
+                    else: # Vertical Short
+                        draw_glass_panel(draw, 90, 400, 900, 700)
+                        draw_outlined_text(draw, (self.width//2, 550), title.upper(), font_title)
+                        draw_progress_bar(draw, 140, 950, 800, 6, progress)
+                        
+                    frame_img.save(os.path.join(frame_dir, f"frame_{f_idx:05d}.jpg"), quality=90)
+                    
+                cmd_frames = [
+                    "ffmpeg", "-y", "-framerate", str(self.fps),
+                    "-i", os.path.join(frame_dir, "frame_%05d.jpg"),
+                    "-c:v", "libx264", "-pix_fmt", "yuv420p", "-t", f"{dur:.2f}",
+                    seg_file
+                ]
+                subprocess.run(cmd_frames, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                
+            if os.path.exists(seg_file) and os.path.getsize(seg_file) > 0:
+                segment_files.append(seg_file)
+                
+        # Concatenate scenes
+        if not segment_files:
+            log_info("[ERROR] No segments compiled successfully.")
+            return False
+            
+        raw_video = os.path.join(temp_dir, "raw_video.mp4")
+        concat_inputs = []
+        filter_parts = []
+        for idx, sf in enumerate(segment_files):
+            concat_inputs.extend(["-i", sf])
+            filter_parts.append(f"[{idx}:v]")
+            
+        filter_str = "".join(filter_parts) + f"concat=n={len(segment_files)}:v=1:a=0[v]"
+        cmd_concat = ["ffmpeg", "-y"] + concat_inputs + ["-filter_complex", filter_str, "-map", "[v]", "-c:v", "libx264", "-pix_fmt", "yuv420p", raw_video]
+        subprocess.run(cmd_concat, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        
+        # Audio track assembly
+        audio_inputs = ["-i", raw_video]
+        audio_mix = ""
+        
+        if voice_audio_path and os.path.exists(voice_audio_path):
+            audio_inputs.extend(["-i", voice_audio_path])
+            audio_mix += "[1:a]volume=1.0[speech];"
+            
+        if self.bg_music and os.path.exists(self.bg_music):
+            audio_inputs.extend(["-stream_loop", "-1", "-i", self.bg_music])
+            music_idx = len(audio_inputs) - 1
+            audio_mix += f"[{music_idx}:a]volume={self.bg_music_vol}dB[bg_music];"
+            
+        if voice_audio_path and self.bg_music:
+            audio_mix += "[speech][bg_music]amix=inputs=2:normalize=0[a]"
+        elif voice_audio_path:
+            audio_mix += "[speech]anull[a]"
+        elif self.bg_music:
+            audio_mix += "[bg_music]anull[a]"
+        else:
+            audio_mix = "[0:a]anull[a]"
+            
+        cmd_final = ["ffmpeg", "-y"] + audio_inputs + ["-filter_complex", audio_mix, "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-shortest", output_path]
+        res = subprocess.run(cmd_final, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        
+        # Clean up temp
+        try:
+            import shutil
+            shutil.rmtree(temp_dir)
+        except:
+            pass
+            
+        if res.returncode == 0:
+            log_info(f"[SUCCESS] Video fully compiled at {output_path}")
+            return True
+        else:
+            log_info(f"[ERROR] Final assembly failed: {res.stderr.decode('utf-8', errors='ignore')}")
+            return False
+
 __version__ = '5.0.0'
+
