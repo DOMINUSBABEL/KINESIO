@@ -14,6 +14,58 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
 
+def get_ken_burns_crop(img, width, height, progress, effect_type):
+    """Applies Ken Burns effect (zoom/pan) to an image and returns the cropped frame."""
+    img_w, img_h = img.size
+    target_aspect = width / height
+    
+    if img_w / img_h > target_aspect:
+        new_w = int(img_h * target_aspect)
+        offset = (img_w - new_w) // 2
+        base_img = img.crop((offset, 0, offset + new_w, img_h))
+    else:
+        new_h = int(img_w / target_aspect)
+        offset = (img_h - new_h) // 2
+        base_img = img.crop((0, offset, img_w, offset + new_h))
+        
+    base_w, base_h = base_img.size
+    
+    if effect_type == "zoom_in":
+        scale = 1.0 + 0.12 * progress
+        scaled_w = int(base_w * scale)
+        scaled_h = int(base_h * scale)
+        scaled_img = base_img.resize((scaled_w, scaled_h), Image.Resampling.LANCZOS)
+        crop_x = (scaled_w - base_w) // 2
+        crop_y = (scaled_h - base_h) // 2
+        cropped = scaled_img.crop((crop_x, crop_y, crop_x + base_w, crop_y + base_h))
+    elif effect_type == "zoom_out":
+        scale = 1.12 - 0.12 * progress
+        scaled_w = int(base_w * scale)
+        scaled_h = int(base_h * scale)
+        scaled_img = base_img.resize((scaled_w, scaled_h), Image.Resampling.LANCZOS)
+        crop_x = (scaled_w - base_w) // 2
+        crop_y = (scaled_h - base_h) // 2
+        cropped = scaled_img.crop((crop_x, crop_y, crop_x + base_w, crop_y + base_h))
+    elif effect_type == "pan_left":
+        scaled_w = int(base_w * 1.12)
+        scaled_h = int(base_h * 1.12)
+        scaled_img = base_img.resize((scaled_w, scaled_h), Image.Resampling.LANCZOS)
+        crop_x = int((scaled_w - base_w) * progress)
+        crop_y = (scaled_h - base_h) // 2
+        cropped = scaled_img.crop((crop_x, crop_y, crop_x + base_w, crop_y + base_h))
+    elif effect_type == "pan_right":
+        scaled_w = int(base_w * 1.12)
+        scaled_h = int(base_h * 1.12)
+        scaled_img = base_img.resize((scaled_w, scaled_h), Image.Resampling.LANCZOS)
+        crop_x = int((scaled_w - base_w) * (1.0 - progress))
+        crop_y = (scaled_h - base_h) // 2
+        cropped = scaled_img.crop((crop_x, crop_y, crop_x + base_w, crop_y + base_h))
+    else:
+        cropped = base_img
+        
+    return cropped.resize((width, height), Image.Resampling.LANCZOS)
+
+
 BASE_DIR = r"C:\Users\jegom\shorts_project"
 CAPSULES_DIR = os.path.join(BASE_DIR, "capsules")
 TRAILERS_DIR = os.path.join(BASE_DIR, "trailers")
@@ -187,8 +239,8 @@ def get_chapter_timestamps(script_path, total_duration):
         
     return boundaries
 
-def draw_horizontal_frame(draw, width, height, title, subtitle, font_title, font_sub, screenshot_path_or_img, progress, meme_text=None, font_meme=None):
-    # 1. Background image with static blurred background cache
+def draw_horizontal_frame(draw, width, height, title, subtitle, font_title, font_sub, screenshot_path_or_img, progress, meme_text=None, font_meme=None, effect_type="zoom_in"):
+    # 1. Background image with dynamic Ken Burns crop
     img_src = None
     if screenshot_path_or_img:
         if isinstance(screenshot_path_or_img, str):
@@ -198,21 +250,13 @@ def draw_horizontal_frame(draw, width, height, title, subtitle, font_title, font
             img_src = screenshot_path_or_img
 
     if img_src:
-        if not hasattr(draw_horizontal_frame, "bg_cache") or draw_horizontal_frame.bg_cache_src != img_src:
-            bg_scale = 1.06
-            bg_w = int(width * bg_scale)
-            bg_h = int(height * bg_scale)
-            img_bg_static = img_src.resize((bg_w, bg_h))
-            crop_x = (bg_w - width) // 2
-            crop_y = (bg_h - height) // 2
-            img_bg_static = img_bg_static.crop((crop_x, crop_y, crop_x + width, crop_y + height))
-            img_bg_static = img_bg_static.filter(ImageFilter.GaussianBlur(18))
-            overlay = Image.new("RGBA", (width, height), (8, 12, 24, 160))
-            draw_horizontal_frame.bg_cache = Image.alpha_composite(img_bg_static.convert("RGBA"), overlay)
-            draw_horizontal_frame.bg_cache_src = img_src
-        img_bg = draw_horizontal_frame.bg_cache.copy()
+        img_bg_static = get_ken_burns_crop(img_src, width, height, progress, effect_type)
+        img_bg_static = img_bg_static.filter(ImageFilter.GaussianBlur(18))
+        overlay = Image.new("RGBA", (width, height), (8, 12, 24, 160))
+        img_bg = Image.alpha_composite(img_bg_static.convert("RGBA"), overlay)
     else:
         img_bg = Image.new("RGBA", (width, height), (10, 15, 30, 255))
+
         
     draw_img = ImageDraw.Draw(img_bg)
     
@@ -332,13 +376,20 @@ def compile_horizontal_video(appid, game_name, prefix, output_path, script_path,
         if idx % 2 == 1 and trailer_dur > 10.0:
             # Slice gameplay from the trailer (looping to guarantee enough length)
             clip_start = (idx * 15.0) % trailer_dur
+            gp_filters = [
+                "scale=2200:-1,crop=w='in_w*(1-0.12*t/dur)':h='in_h*(1-0.12*t/dur)':x='(in_w-out_w)/2':y='(in_h-out_h)/2',scale=1920:1080", # Zoom In
+                "scale=2200:-1,crop=w='in_w*(0.88+0.12*t/dur)':h='in_h*(0.88+0.12*t/dur)':x='(in_w-out_w)/2':y='(in_h-out_h)/2',scale=1920:1080", # Zoom Out
+                "scale=2400:-1,crop=w='in_h*1.777':h='in_h':x='(in_w-out_w)*(t/dur)':y=0,scale=1920:1080", # Pan Left-to-Right
+                "scale=2400:-1,crop=w='in_h*1.777':h='in_h':x='(in_w-out_w)*(1-t/dur)':y=0,scale=1920:1080" # Pan Right-to-Left
+            ]
+            gp_filter = gp_filters[idx % len(gp_filters)].replace("dur", f"{dur:.2f}")
             cmd_slice = [
                 "ffmpeg", "-y",
                 "-stream_loop", "-1",
                 "-ss", f"{clip_start:.2f}",
                 "-i", trailer_file,
                 "-t", f"{dur:.2f}",
-                "-vf", f"scale={width}:{height}:force_original_aspect_ratio=decrease,pad={width}:{height}:(ow-iw)/2:(oh-ih)/2,setsar=1",
+                "-vf", f"{gp_filter},force_original_aspect_ratio=decrease,pad={width}:{height}:(ow-iw)/2:(oh-ih)/2,setsar=1",
                 "-c:v", "libx264", "-pix_fmt", "yuv420p", "-an",
                 seg_video
             ]
@@ -359,6 +410,8 @@ def compile_horizontal_video(appid, game_name, prefix, output_path, script_path,
             elif "imperfección" in title.lower() or "janko" in title.lower():
                 meme = "OFERTAZO 💸"
                 
+            kb_effects = ["zoom_in", "zoom_out", "pan_left", "pan_right"]
+            
             for f_idx in range(total_frames):
                 progress = f_idx / total_frames
                 
@@ -369,11 +422,13 @@ def compile_horizontal_video(appid, game_name, prefix, output_path, script_path,
                 else:
                     img_src = None
                     
+                effect_type = kb_effects[(idx + (f_idx // 600)) % len(kb_effects)]
                 frame_img = draw_horizontal_frame(
                     None, width, height, title.upper(),
                     f"Sección {idx + 1}: {custom_subtitle}",
                     font_title, font_sub, img_src, progress,
-                    meme_text=meme if progress > 0.4 else None, font_meme=font_meme
+                    meme_text=meme if progress > 0.4 else None, font_meme=font_meme,
+                    effect_type=effect_type
                 )
                 frame_img.save(os.path.join(frame_dir, f"frame_{f_idx:05d}.jpg"), quality=90)
                 
@@ -475,7 +530,7 @@ def compile_horizontal_video(appid, game_name, prefix, output_path, script_path,
     else:
         print(f"  [SUCCESS] Horizonal video generated at {output_path}")
 
-def draw_vertical_frame(draw, width, height, title, desc, card_data, progress, font_title, font_sub, font_bold, capsule_path_or_img):
+def draw_vertical_frame(draw, width, height, title, desc, card_data, progress, font_title, font_sub, font_bold, capsule_path_or_img, effect_type="zoom_in"):
     img_src = None
     if capsule_path_or_img:
         if isinstance(capsule_path_or_img, str):
@@ -485,21 +540,13 @@ def draw_vertical_frame(draw, width, height, title, desc, card_data, progress, f
             img_src = capsule_path_or_img
 
     if img_src:
-        if not hasattr(draw_vertical_frame, "bg_cache") or draw_vertical_frame.bg_cache_src != img_src:
-            bg_scale = 1.12
-            bg_w = int(width * bg_scale)
-            bg_h = int(height * bg_scale)
-            img_bg_static = img_src.resize((bg_w, bg_h))
-            crop_x = (bg_w - width) // 2
-            crop_y = (bg_h - height) // 2
-            img_bg_static = img_bg_static.crop((crop_x, crop_y, crop_x + width, crop_y + height))
-            img_bg_static = img_bg_static.filter(ImageFilter.GaussianBlur(15))
-            overlay = Image.new("RGBA", (width, height), (8, 12, 24, 180))
-            draw_vertical_frame.bg_cache = Image.alpha_composite(img_bg_static.convert("RGBA"), overlay)
-            draw_vertical_frame.bg_cache_src = img_src
-        img_bg = draw_vertical_frame.bg_cache.copy()
+        img_bg_static = get_ken_burns_crop(img_src, width, height, progress, effect_type)
+        img_bg_static = img_bg_static.filter(ImageFilter.GaussianBlur(15))
+        overlay = Image.new("RGBA", (width, height), (8, 12, 24, 180))
+        img_bg = Image.alpha_composite(img_bg_static.convert("RGBA"), overlay)
     else:
         img_bg = Image.new("RGBA", (width, height), (13, 20, 38, 255))
+
         
     draw_img = ImageDraw.Draw(img_bg)
     
@@ -677,12 +724,17 @@ def compile_vertical_short(short_obj, bg_music_filename="Sneaky Snitch.mp3"):
     total_frames = int(audio_dur * 30)
     img_capsule = Image.open(capsule_path) if os.path.exists(capsule_path) else None
     
+    kb_effects = ["zoom_in", "zoom_out", "pan_left", "pan_right", "zoom_in"]
+    short_idx = int(key.split("_")[-1]) - 1
+    effect_type = kb_effects[short_idx % len(kb_effects)]
+    
     for f_idx in range(total_frames):
         progress = f_idx / total_frames
         frame_img = draw_vertical_frame(
-            None, width, height, title, desc, card, progress, font_title, font_sub, font_bold, img_capsule
+            None, width, height, title, desc, card, progress, font_title, font_sub, font_bold, img_capsule, effect_type
         )
         frame_img.save(os.path.join(temp_dir, f"frame_{f_idx:05d}.jpg"), quality=90)
+
         
     # Compile base video
     base_video = os.path.join(temp_dir, "base_video.mp4")
@@ -712,7 +764,7 @@ def compile_vertical_short(short_obj, bg_music_filename="Sneaky Snitch.mp3"):
             "-ss", "10.00",
             "-i", trailer_path,
             "-t", f"{overlay_dur:.2f}",
-            "-vf", "scale=900:506:force_original_aspect_ratio=decrease,pad=900:506:(ow-iw)/2:(oh-ih)/2,setsar=1",
+            "-vf", f"scale=1280:-1,crop=w='in_w*(1-0.12*t/{overlay_dur:.2f})':h='in_h*(1-0.12*t/{overlay_dur:.2f})':x='(in_w-out_w)/2':y='(in_h-out_h)/2',scale=900:506,force_original_aspect_ratio=decrease,pad=900:506:(ow-iw)/2:(oh-ih)/2,setsar=1",
             "-c:v", "libx264", "-pix_fmt", "yuv420p", "-an",
             gameplay_clip
         ]

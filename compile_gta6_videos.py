@@ -12,6 +12,58 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
 
+def get_ken_burns_crop(img, width, height, progress, effect_type):
+    """Applies Ken Burns effect (zoom/pan) to an image and returns the cropped frame."""
+    img_w, img_h = img.size
+    target_aspect = width / height
+    
+    if img_w / img_h > target_aspect:
+        new_w = int(img_h * target_aspect)
+        offset = (img_w - new_w) // 2
+        base_img = img.crop((offset, 0, offset + new_w, img_h))
+    else:
+        new_h = int(img_w / target_aspect)
+        offset = (img_h - new_h) // 2
+        base_img = img.crop((0, offset, img_w, offset + new_h))
+        
+    base_w, base_h = base_img.size
+    
+    if effect_type == "zoom_in":
+        scale = 1.0 + 0.12 * progress
+        scaled_w = int(base_w * scale)
+        scaled_h = int(base_h * scale)
+        scaled_img = base_img.resize((scaled_w, scaled_h), Image.Resampling.LANCZOS)
+        crop_x = (scaled_w - base_w) // 2
+        crop_y = (scaled_h - base_h) // 2
+        cropped = scaled_img.crop((crop_x, crop_y, crop_x + base_w, crop_y + base_h))
+    elif effect_type == "zoom_out":
+        scale = 1.12 - 0.12 * progress
+        scaled_w = int(base_w * scale)
+        scaled_h = int(base_h * scale)
+        scaled_img = base_img.resize((scaled_w, scaled_h), Image.Resampling.LANCZOS)
+        crop_x = (scaled_w - base_w) // 2
+        crop_y = (scaled_h - base_h) // 2
+        cropped = scaled_img.crop((crop_x, crop_y, crop_x + base_w, crop_y + base_h))
+    elif effect_type == "pan_left":
+        scaled_w = int(base_w * 1.12)
+        scaled_h = int(base_h * 1.12)
+        scaled_img = base_img.resize((scaled_w, scaled_h), Image.Resampling.LANCZOS)
+        crop_x = int((scaled_w - base_w) * progress)
+        crop_y = (scaled_h - base_h) // 2
+        cropped = scaled_img.crop((crop_x, crop_y, crop_x + base_w, crop_y + base_h))
+    elif effect_type == "pan_right":
+        scaled_w = int(base_w * 1.12)
+        scaled_h = int(base_h * 1.12)
+        scaled_img = base_img.resize((scaled_w, scaled_h), Image.Resampling.LANCZOS)
+        crop_x = int((scaled_w - base_w) * (1.0 - progress))
+        crop_y = (scaled_h - base_h) // 2
+        cropped = scaled_img.crop((crop_x, crop_y, crop_x + base_w, crop_y + base_h))
+    else:
+        cropped = base_img
+        
+    return cropped.resize((width, height), Image.Resampling.LANCZOS)
+
+
 BASE_DIR = r"C:\Users\jegom\shorts_project"
 CAPSULES_DIR = os.path.join(BASE_DIR, "capsules")
 TRAILERS_DIR = os.path.join(BASE_DIR, "trailers")
@@ -90,33 +142,34 @@ def create_dynamic_gameplay_sequence():
         
     print("Preparing high-action gameplay cuts from GTA 6 trailer...")
     cuts = [
-        "3.00",   # Bridge/Highway Vice City
-        "14.00",  # Beach/Pool Party
-        "28.00",  # Strip Club / Neon Lights
-        "37.00",  # Mud Wrestling truck drift
-        "52.00",  # Lucia and Jason driving fast
-        "73.00"   # Store Robbery Standoff
+        {"ss": "3.00", "filter": "scale=1280:-1,crop=w='in_w*(1-0.12*t/10)':h='in_h*(1-0.12*t/10)':x='(in_w-out_w)/2':y='(in_h-out_h)/2',scale=900:506"}, # Zoom In
+        {"ss": "14.00", "filter": "scale=1280:-1,crop=w='in_w*(0.88+0.12*t/10)':h='in_h*(0.88+0.12*t/10)':x='(in_w-out_w)/2':y='(in_h-out_h)/2',scale=900:506"}, # Zoom Out
+        {"ss": "28.00", "filter": "scale=1400:-1,crop=w='in_h*1.777':h='in_h':x='(in_w-out_w)*(t/10)':y=0,scale=900:506"}, # Pan Left-to-Right
+        {"ss": "37.00", "filter": "scale=1280:-1,crop=w='in_w*(1-0.12*t/10)':h='in_h*(1-0.12*t/10)':x='(in_w-out_w)/2':y='(in_h-out_h)/2',scale=900:506"}, # Zoom In
+        {"ss": "52.00", "filter": "scale=1280:-1,crop=w='in_w*(0.88+0.12*t/10)':h='in_h*(0.88+0.12*t/10)':x='(in_w-out_w)/2':y='(in_h-out_h)/2',scale=900:506"}, # Zoom Out
+        {"ss": "73.00", "filter": "scale=1400:-1,crop=w='in_h*1.777':h='in_h':x='(in_w-out_w)*(1-t/10)':y=0,scale=900:506"} # Pan Right-to-Left
     ]
     
     temp_cuts_dir = os.path.join(BASE_DIR, "temp_gta_cuts")
     os.makedirs(temp_cuts_dir, exist_ok=True)
     
     cut_files = []
-    for idx, ss in enumerate(cuts):
+    for idx, item in enumerate(cuts):
         cut_file = os.path.join(temp_cuts_dir, f"cut_{idx}.mp4")
-        # Cut 10 seconds per scene, scale and pad to 900x506
+        # Apply the dynamic filter
         cmd = [
             "ffmpeg", "-y",
-            "-ss", ss,
+            "-ss", item["ss"],
             "-i", trailer_path,
             "-t", "10",
-            "-vf", "scale=900:506:force_original_aspect_ratio=decrease,pad=900:506:(ow-iw)/2:(oh-ih)/2,setsar=1",
+            "-vf", f"{item['filter']},force_original_aspect_ratio=decrease,pad=900:506:(ow-iw)/2:(oh-ih)/2,setsar=1",
             "-c:v", "libx264", "-pix_fmt", "yuv420p", "-an",
             cut_file
         ]
         subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         if os.path.exists(cut_file) and os.path.getsize(cut_file) > 0:
             cut_files.append(cut_file)
+
             
     # Concatenate the cuts
     concat_txt = os.path.join(temp_cuts_dir, "concat.txt")
@@ -141,7 +194,7 @@ def create_dynamic_gameplay_sequence():
         
     return seq_output
 
-def draw_vertical_frame(draw, width, height, title, phrase, hook, progress, font_title, font_sub, font_bold, font_subtitles, capsule_path_or_img):
+def draw_vertical_frame(draw, width, height, title, phrase, hook, progress, font_title, font_sub, font_bold, font_subtitles, capsule_path_or_img, effect_type="zoom_in"):
     img_src = None
     if capsule_path_or_img:
         if isinstance(capsule_path_or_img, str):
@@ -151,21 +204,13 @@ def draw_vertical_frame(draw, width, height, title, phrase, hook, progress, font
             img_src = capsule_path_or_img
 
     if img_src:
-        if not hasattr(draw_vertical_frame, "bg_cache") or draw_vertical_frame.bg_cache_src != img_src:
-            bg_scale = 1.15
-            bg_w = int(width * bg_scale)
-            bg_h = int(height * bg_scale)
-            img_bg_static = img_src.resize((bg_w, bg_h))
-            crop_x = (bg_w - width) // 2
-            crop_y = (bg_h - height) // 2
-            img_bg_static = img_bg_static.crop((crop_x, crop_y, crop_x + width, crop_y + height))
-            img_bg_static = img_bg_static.filter(ImageFilter.GaussianBlur(15))
-            overlay = Image.new("RGBA", (width, height), (12, 10, 24, 190))
-            draw_vertical_frame.bg_cache = Image.alpha_composite(img_bg_static.convert("RGBA"), overlay)
-            draw_vertical_frame.bg_cache_src = img_src
-        img_bg = draw_vertical_frame.bg_cache.copy()
+        img_bg_static = get_ken_burns_crop(img_src, width, height, progress, effect_type)
+        img_bg_static = img_bg_static.filter(ImageFilter.GaussianBlur(15))
+        overlay = Image.new("RGBA", (width, height), (12, 10, 24, 190))
+        img_bg = Image.alpha_composite(img_bg_static.convert("RGBA"), overlay)
     else:
         img_bg = Image.new("RGBA", (width, height), (15, 10, 30, 255))
+
         
     draw_img = ImageDraw.Draw(img_bg)
     
@@ -290,6 +335,10 @@ def compile_gta6_short(short_obj, gameplay_seq):
     total_frames = int(audio_dur * 30)
     img_capsule = Image.open(capsule_path) if os.path.exists(capsule_path) else None
     
+    kb_effects = ["zoom_in", "zoom_out", "pan_left", "pan_right", "zoom_in"]
+    short_idx = int(key.split("_")[-1]) - 1
+    effect_type = kb_effects[short_idx % len(kb_effects)]
+    
     for f_idx in range(total_frames):
         progress = f_idx / total_frames
         
@@ -298,8 +347,9 @@ def compile_gta6_short(short_obj, gameplay_seq):
         phrase = phrases[p_idx]
         
         frame_img = draw_vertical_frame(
-            None, width, height, title, phrase, hook, progress, font_title, font_sub, font_bold, font_subtitles, img_capsule
+            None, width, height, title, phrase, hook, progress, font_title, font_sub, font_bold, font_subtitles, img_capsule, effect_type
         )
+
         frame_img.save(os.path.join(temp_dir, f"frame_{f_idx:05d}.jpg"), quality=90)
         
     # Compile base video
