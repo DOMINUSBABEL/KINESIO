@@ -73,3 +73,6 @@ def get_ken_burns_crop(img, width, height, progress, effect_type):
 
 def apply_vignette(draw_img, width, height, color=(0, 0, 0, 120), thickness=50):
     draw_img.rectangle([0, 0, width, height], outline=color, width=thickness)
+
+def draw_glass_panel(draw_img, x, y, w, h, radius=24, fill=(13, 20, 38, 210), outline=(255, 255, 255, 25), width=2):
+    draw_img.rounded_rectangle([x, y, x + w, y + h], radius=radius, fill=fill, outline=outline, width=width)
