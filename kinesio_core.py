@@ -102,3 +102,8 @@ def build_audio_mix_filter(speech_vol="1.0", bg_vol="-24dB"):
 def draw_progress_bar(draw_img, x, y, w, h, progress, bg_color=(30, 41, 59, 255), fill_color=(249, 115, 22, 255)):
     draw_img.rounded_rectangle([x, y, x + w, y + h], radius=h//2, fill=bg_color)
     draw_img.rounded_rectangle([x, y, x + int(w * progress), y + h], radius=h//2, fill=fill_color)
+
+def draw_progress_ring(draw_img, pos, radius, progress, outline_color=(249, 115, 22, 255), width=8):
+    x, y = pos
+    bbox = [x - radius, y - radius, x + radius, y + radius]
+    draw_img.arc(bbox, start=-90, end=-90 + int(360 * progress), fill=outline_color, width=width)
