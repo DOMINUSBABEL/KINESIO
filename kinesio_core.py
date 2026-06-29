@@ -35,3 +35,20 @@ def get_ken_burns_crop(img, width, height, progress, effect_type):
         base_img = img.crop((0, offset, img_w, offset + new_h))
         
     base_w, base_h = base_img.size
+
+    if effect_type == "zoom_in":
+        scale = 1.0 + 0.12 * progress
+        scaled_w = int(base_w * scale)
+        scaled_h = int(base_h * scale)
+        scaled_img = base_img.resize((scaled_w, scaled_h), Image.Resampling.LANCZOS)
+        crop_x = (scaled_w - base_w) // 2
+        crop_y = (scaled_h - base_h) // 2
+        cropped = scaled_img.crop((crop_x, crop_y, crop_x + base_w, crop_y + base_h))
+    elif effect_type == "zoom_out":
+        scale = 1.12 - 0.12 * progress
+        scaled_w = int(base_w * scale)
+        scaled_h = int(base_h * scale)
+        scaled_img = base_img.resize((scaled_w, scaled_h), Image.Resampling.LANCZOS)
+        crop_x = (scaled_w - base_w) // 2
+        crop_y = (scaled_h - base_h) // 2
+        cropped = scaled_img.crop((crop_x, crop_y, crop_x + base_w, crop_y + base_h))
