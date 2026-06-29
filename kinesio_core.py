@@ -123,3 +123,5 @@ def load_safe_font(font_path, size):
         return ImageFont.truetype(font_path, size)
     except:
         return ImageFont.load_default()
+
+__version__ = '5.0.0'
