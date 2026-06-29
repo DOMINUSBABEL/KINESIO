@@ -76,3 +76,7 @@ def apply_vignette(draw_img, width, height, color=(0, 0, 0, 120), thickness=50):
 
 def draw_glass_panel(draw_img, x, y, w, h, radius=24, fill=(13, 20, 38, 210), outline=(255, 255, 255, 25), width=2):
     draw_img.rounded_rectangle([x, y, x + w, y + h], radius=radius, fill=fill, outline=outline, width=width)
+
+def apply_color_grading(img, color=(251, 115, 22, 15)):
+    overlay = Image.new("RGBA", img.size, color)
+    return Image.alpha_composite(img.convert("RGBA"), overlay).convert("RGB")
