@@ -168,3 +168,6 @@ KINESIO es una marca registrada de **BABYLON.IA** y su arquitectura agéntica de
 
 ## ⚙️ Ecosistema Core (kinesio_core.py)
 KINESIO cuenta con un núcleo de utilidades optimizado para procesamiento multimedia en memoria. Este módulo encapsula las funciones matemáticas de redimensionado, efectos de difuminado y generación de barras de progreso dinámicas.
+
+### 🎬 Efectos Ken Burns y Paneo Dinámico
+El motor calcula progresiones geométricas para recortar y desplazar las imágenes de fondo en tiempo real, logrando transiciones fluidas de cámara y combatiendo la fatiga estática.
