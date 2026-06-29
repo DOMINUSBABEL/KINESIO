@@ -88,3 +88,10 @@ def draw_outlined_text(draw_img, pos, text, font, text_color=(255, 255, 255, 255
             if dx != 0 or dy != 0:
                 draw_img.text((x + dx, y + dy), text, font=font, fill=outline_color, anchor=anchor)
     draw_img.text((x, y), text, font=font, fill=text_color, anchor=anchor)
+
+def build_ffmpeg_slice_cmd(in_file, out_file, ss, t, filter_str=None):
+    cmd = ["ffmpeg", "-y", "-ss", str(ss), "-i", in_file, "-t", str(t)]
+    if filter_str:
+        cmd.extend(["-vf", filter_str])
+    cmd.extend(["-c:v", "libx264", "-pix_fmt", "yuv420p", "-an", out_file])
+    return cmd
