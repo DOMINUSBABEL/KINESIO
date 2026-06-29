@@ -117,3 +117,9 @@ def apply_letterbox(img, height_ratio=0.12):
     return img
 
 # KINESIO Core fully optimized for 4K60 and 1080p30 rendering pipelines.
+
+def load_safe_font(font_path, size):
+    try:
+        return ImageFont.truetype(font_path, size)
+    except:
+        return ImageFont.load_default()
