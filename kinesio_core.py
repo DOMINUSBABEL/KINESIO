@@ -59,3 +59,14 @@ def get_ken_burns_crop(img, width, height, progress, effect_type):
         crop_x = int((scaled_w - base_w) * progress)
         crop_y = (scaled_h - base_h) // 2
         cropped = scaled_img.crop((crop_x, crop_y, crop_x + base_w, crop_y + base_h))
+    elif effect_type == "pan_right":
+        scaled_w = int(base_w * 1.12)
+        scaled_h = int(base_h * 1.12)
+        scaled_img = base_img.resize((scaled_w, scaled_h), Image.Resampling.LANCZOS)
+        crop_x = int((scaled_w - base_w) * (1.0 - progress))
+        crop_y = (scaled_h - base_h) // 2
+        cropped = scaled_img.crop((crop_x, crop_y, crop_x + base_w, crop_y + base_h))
+    else:
+        cropped = base_img
+        
+    return cropped.resize((width, height), Image.Resampling.LANCZOS)
