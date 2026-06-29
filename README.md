@@ -142,9 +142,35 @@ def generate_pop(filename, duration=0.15, sample_rate=44100):
 
 ---
 
+## 🚀 Orchestrating Custom Videos (KinesioVideoBuilder API)
+
+With the introduction of the `KinesioVideoBuilder` orchestrator engine, you can programmatically compile any genre of content (educational essays, tops, reviews, or faceless shorts) with a simple Python API:
+
+```python
+from kinesio_core import KinesioVideoBuilder
+
+# 1. Initialize a widescreen project
+builder = KinesioVideoBuilder(project_name="space_essay", width=1920, height=1080)
+
+# 2. Add sequential scenes (Pillow Ken Burns slides or custom gameplay overlay b-rolls)
+builder.add_scene(title="Chapter 1: The Cosmos", duration=15.0, asset_path="screenshots/space_1.jpg", effect_type="zoom_in")
+builder.add_scene(title="Chapter 2: Orbit B-Roll", duration=10.0, gameplay_overlay="trailers/space_clip.mp4")
+builder.add_scene(title="Chapter 3: Final Frontiers", duration=20.0, asset_path="screenshots/space_2.jpg", effect_type="pan_left")
+
+# 3. Configure audio tracks (Voiceover, background music, and delay SFX)
+builder.set_background_music("music/Severe Tire Damage.mp3", volume=-24)
+builder.add_sfx("pop.wav", delay_seconds=2.5)
+
+# 4. Compile the final production H.264 video
+builder.build(output_path="space_essay_final.mp4", voice_audio_path="audio_space.mp3")
+```
+
+---
+
 ## ✒️ Credits & License
 
 *   **Project Director:** [Juan Esteban Gómez Bernal (DOMINUSBABEL)](https://github.com/DOMINUSBABEL)
 *   **Development Agency:** [BABYLON.IA](https://babylonias.com)
 
 KINESIO is a registered trademark of **BABYLON.IA** and is distributed under the MIT License.
+
