@@ -98,3 +98,7 @@ def build_ffmpeg_slice_cmd(in_file, out_file, ss, t, filter_str=None):
 
 def build_audio_mix_filter(speech_vol="1.0", bg_vol="-24dB"):
     return f"[1:a]volume={speech_vol}[speech];[2:a]volume={bg_vol}[bg_music];[speech][bg_music]amix=inputs=2:normalize=0[a]"
+
+def draw_progress_bar(draw_img, x, y, w, h, progress, bg_color=(30, 41, 59, 255), fill_color=(249, 115, 22, 255)):
+    draw_img.rounded_rectangle([x, y, x + w, y + h], radius=h//2, fill=bg_color)
+    draw_img.rounded_rectangle([x, y, x + int(w * progress), y + h], radius=h//2, fill=fill_color)
