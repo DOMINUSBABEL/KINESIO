@@ -17,9 +17,11 @@ uploaded_file_log_1 = os.path.join(BASE_DIR, "uploaded_campaign_1.txt")
 uploaded_file_log_2 = os.path.join(BASE_DIR, "uploaded_campaign_2.txt")
 uploaded_file_log_3 = os.path.join(BASE_DIR, "uploaded_campaign_3.txt")
 uploaded_file_log_4 = os.path.join(BASE_DIR, "uploaded_campaign_4.txt")
+uploaded_file_log_5 = os.path.join(BASE_DIR, "uploaded_campaign_5.txt")
 file_shorts_c2 = os.path.join(BASE_DIR, "scripts_expansion_shorts.md")
 file_shorts_c3 = os.path.join(BASE_DIR, "scripts_war_myths.md")
 file_shorts_c4 = os.path.join(BASE_DIR, "scripts_argentina_rivalries.md")
+file_shorts_c5 = os.path.join(BASE_DIR, "scripts_spain_final.md")
 
 # ==========================================
 # CAMPAIGN 1 UPGRADED SEO METADATA
@@ -324,6 +326,70 @@ SHORT_TITLES_C4 = [
     "¿Es Odio Real o Solo Folklore? 🎭"
 ]
 
+# ==========================================
+# CAMPAIGN 5 UPGRADED SEO METADATA
+# ==========================================
+WIDESCREEN_METADATA_C5 = {
+    "spain_essay_1": {
+        "title": "El Renacer de la Furia Roja: El Camino de España a la Final del Mundial 🇪🇸",
+        "desc": "Analizamos la reconstrucción táctica de Luis de la Fuente, el liderazgo de la nueva generación y el renacer de la Furia Roja que ha conquistado al planeta. \n\n¡Suscríbete para más análisis del Mundial! #españa #seleccion #laroja #delafuente #mundial",
+        "thumb": "spain_team.jpg",
+        "day": 1
+    },
+    "spain_essay_2": {
+        "title": "La Revolución de los Extremos: Lamine Yamal y Nico Williams ⚡",
+        "desc": "El descaro de Lamine Yamal y la potencia de Nico Williams. Analizamos cómo esta increíble dupla de extremos revolucionó el estilo vertical de la selección de España. \n\n¡Dale like y suscríbete! #lamineyamal #nicowilliams #españa #futbol #goles",
+        "thumb": "spain_stars.jpg",
+        "day": 3
+    },
+    "spain_essay_3": {
+        "title": "Escándalos en la Federación: La Batalla Fuera de la Cancha de España ⚖️",
+        "desc": "Desde el caso Rubiales hasta la intervención del gobierno español y las amenazas de sanción de la FIFA. Descubre cómo se blindó el vestuario español en medio de la tormenta. \n\n¡Comenta tu opinión! #rfef #rubiales #fifa #polemica #deportes",
+        "thumb": "spain_team.jpg",
+        "day": 5
+    },
+    "spain_essay_4": {
+        "title": "España en Vísperas de la Final: Análisis Táctico de la Gran Cita 🏆",
+        "desc": "La pizarra táctica de Luis de la Fuente, la importancia de Rodri Hernández en el mediocampo y la búsqueda de la segunda estrella para coser en el escudo. \n\n¡Suscríbete para la previa de la final! #mundial #final #españa #táctica #rodri",
+        "thumb": "spain_trophy.jpg",
+        "day": 7
+    },
+    "spain_essay_5": {
+        "title": "La Segunda Estrella: La Consagración de la Furia Roja ⭐️",
+        "desc": "El legado histórico de Sudáfrica 2010, el orgullo de la camiseta nacional y el renacer de una nueva época dorada del fútbol español. \n\n¡Suscríbete y celebremos la gloria! #campeones #españa #segundaestrella #laroja #futbol",
+        "thumb": "spain_team.jpg",
+        "day": 9
+    }
+}
+
+SHORT_TITLES_C5 = {
+    # Essay 1 Shorts
+    "spain_essay_1_short_1": "Lamine Yamal: ¿Heredero de Messi? 🌟",
+    "spain_essay_1_short_2": "El Estilo Vertical: Adiós al Tiki-Taka ⚡",
+    "spain_essay_1_short_3": "La Pizarra de De la Fuente 📋",
+    "spain_essay_1_short_4": "El Regreso de un Gigante 👑",
+    # Essay 2 Shorts
+    "spain_essay_2_short_1": "La Hermandad Nico-Lamine 🤜🤛",
+    "spain_essay_2_short_2": "Nico Williams: Velocidad Extrema ⚡",
+    "spain_essay_2_short_3": "Lamine Yamal: Joven Récord 🌟",
+    "spain_essay_2_short_4": "Diversidad e Identidad en la Roja 🇪🇸",
+    # Essay 3 Shorts
+    "spain_essay_3_short_1": "El Escándalo de la Federación ⚖",
+    "spain_essay_3_short_2": "La Intervención del Gobierno Español ⚖",
+    "spain_essay_3_short_3": "¿Sanciones FIFA para España? 🚫",
+    "spain_essay_3_short_4": "El Búnker: Blindaje de Vestuario 🛡",
+    # Essay 4 Shorts
+    "spain_essay_4_short_1": "Rodri Hernández: El Cerebro de Oro 🧠",
+    "spain_essay_4_short_2": "La Batalla en el Medio Campo ⚙",
+    "spain_essay_4_short_3": "Unai Simón: Guardián de la Final 🧤",
+    "spain_essay_4_short_4": "El Banquillo de España: Revulsivos 🔋",
+    # Essay 5 Shorts
+    "spain_essay_5_short_1": "¿Segunda Estrella para España? ⭐️",
+    "spain_essay_5_short_2": "El Legado de Sudáfrica 2010 🏆",
+    "spain_essay_5_short_3": "El Peso de una Final Mundialista 🛡",
+    "spain_essay_5_short_4": "La Nueva Edad de Oro del Fútbol 🚀"
+}
+
 def extract_short_text(file_path, key):
     if not os.path.exists(file_path):
         return ""
@@ -591,15 +657,64 @@ def build_queues():
             "thumb": None,
             "schedule": (day_num, hr, mins)
         })
+        
+    # --------------------------------------
+    # BUILD QUEUE FOR CAMPAIGN 5 (SPAIN WORLD CUP - 5 ESSAYS + 20 SHORTS)
+    # --------------------------------------
+    c5_queue = []
+    
+    # Add Widescreen Essays
+    for key, info in WIDESCREEN_METADATA_C5.items():
+        file_path = os.path.join(BASE_DIR, f"{key}_final.mp4")
+        thumb_path = os.path.join(BASE_DIR, "screenshots", info["thumb"])
+        c5_queue.append({
+            "campaign": 5,
+            "file": file_path,
+            "title": info["title"],
+            "desc": info["desc"],
+            "is_short": False,
+            "thumb": thumb_path,
+            "schedule": (info["day"], 12, 0)
+        })
+        
+    # Add 20 Shorts (2 per day at 8:00 AM and 4:00 PM from Day 1 to Day 10)
+    for essay_idx in range(5):
+        for short_idx_in_essay in range(4):
+            short_key = f"spain_essay_{essay_idx+1}_short_{short_idx_in_essay+1}"
+            short_file = os.path.join(BASE_DIR, f"{short_key}_final.mp4")
+            
+            # Fetch short text script
+            short_desc = extract_short_text(file_shorts_c5, short_key)
+            desc_text = f"{short_desc}\n\n#futbol #españa #shorts #laroja #mundial"
+            title_text = SHORT_TITLES_C5.get(short_key, "España Mundialista ⚽")
+            
+            # Calculate short index total (0 to 19)
+            short_idx_total = (essay_idx * 4) + short_idx_in_essay
+            
+            # Scheduling: 2 per day (8:00 AM and 4:00 PM)
+            day_offset = short_idx_total // 2
+            day_num = day_offset + 1
+            hr = 8 if (short_idx_total % 2 == 0) else 16
+            mins = 0
+            
+            c5_queue.append({
+                "campaign": 5,
+                "file": short_file,
+                "title": title_text,
+                "desc": desc_text,
+                "is_short": True,
+                "thumb": None,
+                "schedule": (day_num, hr, mins)
+            })
                 
-    return c1_queue, c2_queue, c3_queue, c4_queue
+    return c1_queue, c2_queue, c3_queue, c4_queue, c5_queue
 
 def main():
     print("====================================================")
-    print("VAREGO UNIFIED INTERLEAVED PIPELINE (CAMPAIGNS 1, 2, 3 & 4)")
+    print("VAREGO UNIFIED INTERLEAVED PIPELINE (CAMPAIGNS 1, 2, 3, 4 & 5)")
     print("====================================================\n")
     
-    c1_queue, c2_queue, c3_queue, c4_queue = build_queues()
+    c1_queue, c2_queue, c3_queue, c4_queue, c5_queue = build_queues()
     last_campaign = None
     
     while True:
@@ -624,6 +739,11 @@ def main():
             with open(uploaded_file_log_4, "r", encoding="utf-8") as f:
                 uploaded_c4 = set(line.strip() for line in f if line.strip())
                 
+        uploaded_c5 = set()
+        if os.path.exists(uploaded_file_log_5):
+            with open(uploaded_file_log_5, "r", encoding="utf-8") as f:
+                uploaded_c5 = set(line.strip() for line in f if line.strip())
+                
         # Organize campaign 1 exports
         subprocess.run(["python", os.path.join(BASE_DIR, "organize_exports.py")], cwd=BASE_DIR, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         
@@ -632,18 +752,19 @@ def main():
             1: [item for item in c1_queue if item["file"] not in uploaded_c1],
             2: [item for item in c2_queue if item["file"] not in uploaded_c2],
             3: [item for item in c3_queue if item["file"] not in uploaded_c3],
-            4: [item for item in c4_queue if item["file"] not in uploaded_c4]
+            4: [item for item in c4_queue if item["file"] not in uploaded_c4],
+            5: [item for item in c5_queue if item["file"] not in uploaded_c5]
         }
         
-        print(f"[STATUS] Campaign 1: {len(pending[1])} pending | Campaign 2: {len(pending[2])} pending | Campaign 3: {len(pending[3])} pending | Campaign 4: {len(pending[4])} pending.")
+        print(f"[STATUS] Campaign 1: {len(pending[1])} pending | Campaign 2: {len(pending[2])} pending | Campaign 3: {len(pending[3])} pending | Campaign 4: {len(pending[4])} pending | Campaign 5: {len(pending[5])} pending.")
         
         # Select next item based on round-robin ordering & file existence on disk
         next_item = None
-        order = [1, 2, 3, 4]
+        order = [1, 2, 3, 4, 5]
         start_idx = order.index(last_campaign) if last_campaign in order else -1
         
-        for offset in range(1, 5):
-            candidate = order[(start_idx + offset) % 4]
+        for offset in range(1, 6):
+            candidate = order[(start_idx + offset) % 5]
             if len(pending[candidate]) > 0:
                 candidate_item = pending[candidate][0]
                 if os.path.exists(candidate_item["file"]):
@@ -667,6 +788,7 @@ def main():
         # Campaign 2 -> target_day = day_num + 10 (Days 11-30)
         # Campaign 3 -> target_day = day_num + 30 (Days 31-40) (5-day cycle per essay + shorts)
         # Campaign 4 -> target_day = day_num + 40 (Days 41-50)
+        # Campaign 5 -> target_day = day_num + 50 (Days 51-60)
         day_num, hr, mins = next_item["schedule"]
         if next_item["campaign"] == 1:
             target_day = day_num
@@ -674,8 +796,10 @@ def main():
             target_day = day_num + 10
         elif next_item["campaign"] == 3:
             target_day = day_num + 30
-        else:
+        elif next_item["campaign"] == 4:
             target_day = day_num + 40
+        else:
+            target_day = day_num + 50
             
         schedule_offset = get_schedule_offset(target_day, hr, mins)
         
@@ -701,8 +825,10 @@ def main():
                 log_file = uploaded_file_log_2
             elif next_item["campaign"] == 3:
                 log_file = uploaded_file_log_3
-            else:
+            elif next_item["campaign"] == 4:
                 log_file = uploaded_file_log_4
+            else:
+                log_file = uploaded_file_log_5
                 
             with open(log_file, "a", encoding="utf-8") as f:
                 f.write(file_path + "\n")

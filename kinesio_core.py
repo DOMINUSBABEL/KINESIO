@@ -25,51 +25,54 @@ def get_ken_burns_crop(img, width, height, progress, effect_type):
     img_w, img_h = img.size
     target_aspect = width / height
     
+    # 1. First get the base crop coordinates matching the target aspect ratio
     if img_w / img_h > target_aspect:
-        new_w = int(img_h * target_aspect)
-        offset = (img_w - new_w) // 2
-        base_img = img.crop((offset, 0, offset + new_w, img_h))
+        base_w = int(img_h * target_aspect)
+        offset_x = (img_w - base_w) // 2
+        offset_y = 0
+        base_h = img_h
     else:
-        new_h = int(img_w / target_aspect)
-        offset = (img_h - new_h) // 2
-        base_img = img.crop((0, offset, img_w, offset + new_h))
-        
-    base_w, base_h = base_img.size
+        base_w = img_w
+        base_h = int(img_w / target_aspect)
+        offset_x = 0
+        offset_y = (img_h - base_h) // 2
 
+    # 2. Calculate the crop box on the original image dynamically based on zoom/pan progress
     if effect_type == "zoom_in":
-        scale = 1.0 + 0.12 * progress
-        scaled_w = int(base_w * scale)
-        scaled_h = int(base_h * scale)
-        scaled_img = base_img.resize((scaled_w, scaled_h), Image.Resampling.LANCZOS)
-        crop_x = (scaled_w - base_w) // 2
-        crop_y = (scaled_h - base_h) // 2
-        cropped = scaled_img.crop((crop_x, crop_y, crop_x + base_w, crop_y + base_h))
+        scale = 1.0 / (1.0 + 0.12 * progress)
+        crop_w = int(base_w * scale)
+        crop_h = int(base_h * scale)
+        crop_x = offset_x + (base_w - crop_w) // 2
+        crop_y = offset_y + (base_h - crop_h) // 2
     elif effect_type == "zoom_out":
-        scale = 1.12 - 0.12 * progress
-        scaled_w = int(base_w * scale)
-        scaled_h = int(base_h * scale)
-        scaled_img = base_img.resize((scaled_w, scaled_h), Image.Resampling.LANCZOS)
-        crop_x = (scaled_w - base_w) // 2
-        crop_y = (scaled_h - base_h) // 2
-        cropped = scaled_img.crop((crop_x, crop_y, crop_x + base_w, crop_y + base_h))
+        scale = 1.0 / (1.12 - 0.12 * progress)
+        crop_w = int(base_w * scale)
+        crop_h = int(base_h * scale)
+        crop_x = offset_x + (base_w - crop_w) // 2
+        crop_y = offset_y + (base_h - crop_h) // 2
     elif effect_type == "pan_left":
-        scaled_w = int(base_w * 1.12)
-        scaled_h = int(base_h * 1.12)
-        scaled_img = base_img.resize((scaled_w, scaled_h), Image.Resampling.LANCZOS)
-        crop_x = int((scaled_w - base_w) * progress)
-        crop_y = (scaled_h - base_h) // 2
-        cropped = scaled_img.crop((crop_x, crop_y, crop_x + base_w, crop_y + base_h))
+        scale = 1.0 / 1.12
+        crop_w = int(base_w * scale)
+        crop_h = int(base_h * scale)
+        max_shift = base_w - crop_w
+        crop_x = offset_x + int(max_shift * (1.0 - progress))
+        crop_y = offset_y + (base_h - crop_h) // 2
     elif effect_type == "pan_right":
-        scaled_w = int(base_w * 1.12)
-        scaled_h = int(base_h * 1.12)
-        scaled_img = base_img.resize((scaled_w, scaled_h), Image.Resampling.LANCZOS)
-        crop_x = int((scaled_w - base_w) * (1.0 - progress))
-        crop_y = (scaled_h - base_h) // 2
-        cropped = scaled_img.crop((crop_x, crop_y, crop_x + base_w, crop_y + base_h))
+        scale = 1.0 / 1.12
+        crop_w = int(base_w * scale)
+        crop_h = int(base_h * scale)
+        max_shift = base_w - crop_w
+        crop_x = offset_x + int(max_shift * progress)
+        crop_y = offset_y + (base_h - crop_h) // 2
     else:
-        cropped = base_img
-        
-    return cropped.resize((width, height), Image.Resampling.LANCZOS)
+        crop_w = base_w
+        crop_h = base_h
+        crop_x = offset_x
+        crop_y = offset_y
+
+    # 3. Crop and resize to final target size using fast BILINEAR
+    cropped = img.crop((crop_x, crop_y, crop_x + crop_w, crop_y + crop_h))
+    return cropped.resize((width, height), Image.Resampling.BILINEAR)
 
 def apply_vignette(draw_img, width, height, color=(0, 0, 0, 120), thickness=50):
     draw_img.rectangle([0, 0, width, height], outline=color, width=thickness)
@@ -273,5 +276,43 @@ class KinesioVideoBuilder:
             log_info(f"[ERROR] Final assembly failed: {res.stderr.decode('utf-8', errors='ignore')}")
             return False
 
-__version__ = '5.0.0'
+def get_multi_broll_crop(img_list, width, height, progress, effect_type="zoom_in"):
+    """
+    Renders dynamic Ken Burns crop with smooth multi-image B-roll switching.
+    Switches across img_list based on progress with a subtle cross-dissolve/blur transition.
+    """
+    if not img_list:
+        return Image.new("RGBA", (width, height), (10, 13, 20, 255))
+    if len(img_list) == 1:
+        return get_ken_burns_crop(img_list[0], width, height, progress, effect_type)
+        
+    num_imgs = len(img_list)
+    step = 1.0 / num_imgs
+    idx = min(int(progress / step), num_imgs - 1)
+    
+    local_prog = (progress - (idx * step)) / step
+    curr_crop = get_ken_burns_crop(img_list[idx], width, height, local_prog, effect_type).convert("RGBA")
+    
+    # Transition blend to next image in the last 15% of each segment
+    if idx < num_imgs - 1 and local_prog > 0.85:
+        trans_alpha = (local_prog - 0.85) / 0.15
+        next_crop = get_ken_burns_crop(img_list[idx + 1], width, height, 0.0, effect_type).convert("RGBA")
+        return Image.blend(curr_crop, next_crop, trans_alpha)
+        
+    return curr_crop
+
+def build_audio_ducking_filter(speech_input_idx=1, music_input_idx=2, speech_vol=1.0, music_vol_db=-24, duck_db=-30):
+    """
+    Generates a high-quality sidechain audio ducking filter string.
+    Lowers background music when speech audio is active and recovers during pauses.
+    """
+    filter_str = (
+        f"[{speech_input_idx}:a]volume={speech_vol},asplit=2[sp1][sp2];"
+        f"[{music_input_idx}:a]volume={music_vol_db}dB[bg];"
+        f"[bg][sp2]sidechaincompress=threshold=0.08:ratio=4:attack=15:release=250:link=average[ducked_bg];"
+        f"[sp1][ducked_bg]amix=inputs=2:normalize=0[a]"
+    )
+    return filter_str
+
+__version__ = '5.1.0'
 

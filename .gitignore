@@ -1,5 +1,8 @@
 # Ignore local audio, video, and cache files
 temp_frames*/
+temp_builder*/
+temp_render*/
+temp_*
 __pycache__/
 *.mp4
 *.mp3
@@ -8,4 +11,6 @@ verify_output.json
 capsules/
 trailers/
 screenshots/
-temp_render*/
+exports/
+uploaded_*.txt
+
