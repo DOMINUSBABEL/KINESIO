@@ -1,0 +1,420 @@
+{
+  "channel": "@dominus8735",
+  "channel_name": "DOMINUSBABEL",
+  "total_shorts": 46,
+  "campaigns": [
+    {
+      "campaign_id": "justiniano_belisario_16",
+      "name": "Campaña Principal: Justiniano, Belisario y la Reconquista Romana",
+      "count": 16,
+      "script_file": "scripts_16_shorts_justiniano_belisario.md",
+      "tts_script": "generate_audio_justiniano_belisario_16.py",
+      "shorts": [
+        {
+          "id": "justiniano_belisario_short_1",
+          "title": "La frase que salvó a Roma de desaparecer en un día 👑🔥 #shorts",
+          "audio": "audio_justiniano_belisario_short_1.mp3",
+          "music": "music/Rites.mp3",
+          "block": "Bloque 1: Ascenso Imperial y Nika",
+          "duration": "35s"
+        },
+        {
+          "id": "justiniano_belisario_short_2",
+          "title": "30.000 personas atrapadas: La sangrienta trampa de Nika 🏟️⚔️ #shorts",
+          "audio": "audio_justiniano_belisario_short_2.mp3",
+          "music": "music/Volatile Reaction.mp3",
+          "block": "Bloque 1: Ascenso Imperial y Nika",
+          "duration": "40s"
+        },
+        {
+          "id": "justiniano_belisario_short_3",
+          "title": "¿Por qué tus leyes actuales vienen de este hombre? 📜⚖️ #shorts",
+          "audio": "audio_justiniano_belisario_short_3.mp3",
+          "music": "music/Moorland.mp3",
+          "block": "Bloque 1: Ascenso Imperial y Nika",
+          "duration": "32s"
+        },
+        {
+          "id": "justiniano_belisario_short_4",
+          "title": "Pagaron 11.000 libras de oro por una \"Paz Eterna\" que duró 8 años 💰💀 #shorts",
+          "audio": "audio_justiniano_belisario_short_4.mp3",
+          "music": "music/Rites.mp3",
+          "block": "Bloque 1: Ascenso Imperial y Nika",
+          "duration": "38s"
+        },
+        {
+          "id": "justiniano_belisario_short_5",
+          "title": "Desembarcó un ejército entero sin que el enemigo se enterara 🚢⚔️ #shorts",
+          "audio": "audio_justiniano_belisario_short_5.mp3",
+          "music": "music/Clash Defiant.mp3",
+          "block": "Bloque 2: Guerra Relámpago en África",
+          "duration": "36s"
+        },
+        {
+          "id": "justiniano_belisario_short_6",
+          "title": "El plan perfecto que se convirtió en una emboscada suicida 🏹💥 #shorts",
+          "audio": "audio_justiniano_belisario_short_6.mp3",
+          "music": "music/Volatile Reaction.mp3",
+          "block": "Bloque 2: Guerra Relámpago en África",
+          "duration": "42s"
+        },
+        {
+          "id": "justiniano_belisario_short_7",
+          "title": "El único hombre no emperador en celebrar un Triunfo Romano 🏛️🎖️ #shorts",
+          "audio": "audio_justiniano_belisario_short_7.mp3",
+          "music": "music/Moorland.mp3",
+          "block": "Bloque 2: Guerra Relámpago en África",
+          "duration": "35s"
+        },
+        {
+          "id": "justiniano_belisario_short_8",
+          "title": "Así capturaron una ciudad inexpugnable entrando por las tuberías 💧🗡️ #shorts",
+          "audio": "audio_justiniano_belisario_short_8.mp3",
+          "music": "music/Clash Defiant.mp3",
+          "block": "Bloque 2: Guerra Relámpago en África",
+          "duration": "45s"
+        },
+        {
+          "id": "justiniano_belisario_short_9",
+          "title": "7.000 defensores vs 150.000 atacantes: El Asedio a la Ciudad Eterna 🛡️⚔️ #shorts",
+          "audio": "audio_justiniano_belisario_short_9.mp3",
+          "music": "music/Volatile Reaction.mp3",
+          "block": "Bloque 3: Colosal Asedio de Roma",
+          "duration": "45s"
+        },
+        {
+          "id": "justiniano_belisario_short_10",
+          "title": "Cómo destruir torres de asedio gigantes con una sola orden 🎯🏹 #shorts",
+          "audio": "audio_justiniano_belisario_short_10.mp3",
+          "music": "music/Clash Defiant.mp3",
+          "block": "Bloque 3: Colosal Asedio de Roma",
+          "duration": "38s"
+        },
+        {
+          "id": "justiniano_belisario_short_11",
+          "title": "La unidad olvidada que evitó la caída de Roma en la Puerta Flaminia 🛡️🩸 #shorts",
+          "audio": "audio_justiniano_belisario_short_11.mp3",
+          "music": "music/Volatile Reaction.mp3",
+          "block": "Bloque 3: Colosal Asedio de Roma",
+          "duration": "40s"
+        },
+        {
+          "id": "justiniano_belisario_short_12",
+          "title": "Cómo transformar la retirada del enemigo en una masacre 🌊⚔️ #shorts",
+          "audio": "audio_justiniano_belisario_short_12.mp3",
+          "music": "music/Clash Defiant.mp3",
+          "block": "Bloque 3: Colosal Asedio de Roma",
+          "duration": "37s"
+        },
+        {
+          "id": "justiniano_belisario_short_13",
+          "title": "El rey bárbaro que reconquistó toda Italia en un solo verano 👑⚡ #shorts",
+          "audio": "audio_justiniano_belisario_short_13.mp3",
+          "music": "music/Rites.mp3",
+          "block": "Bloque 4: Desgaste, Peste y Colapso",
+          "duration": "42s"
+        },
+        {
+          "id": "justiniano_belisario_short_14",
+          "title": "El virus que mató a 5.000 personas por día y destruyó el sueño de Roma ☣️💀 #shorts",
+          "audio": "audio_justiniano_belisario_short_14.mp3",
+          "music": "music/Moorland.mp3",
+          "block": "Bloque 4: Desgaste, Peste y Colapso",
+          "duration": "46s"
+        },
+        {
+          "id": "justiniano_belisario_short_15",
+          "title": "El rey que saqueó una ciudad romana y la reconstruyó idéntica en Persia 🏛️🔥 #shorts",
+          "audio": "audio_justiniano_belisario_short_15.mp3",
+          "music": "music/Rites.mp3",
+          "block": "Bloque 4: Desgaste, Peste y Colapso",
+          "duration": "44s"
+        },
+        {
+          "id": "justiniano_belisario_short_16",
+          "title": "La amarga verdad: ¿Destruyó Justiniano a Roma intentando salvarla? 🏛️🥀 #shorts",
+          "audio": "audio_justiniano_belisario_short_16.mp3",
+          "music": "music/Moorland.mp3",
+          "block": "Bloque 4: Desgaste, Peste y Colapso",
+          "duration": "48s"
+        }
+      ]
+    },
+    {
+      "campaign_id": "rts_2026_9",
+      "name": "Campaña: La Era Dorada del RTS (Steam / PC Gaming 2026)",
+      "count": 9,
+      "script_file": "scripts_15_shorts_rts_roma_2026.md",
+      "tts_script": "generate_audio_rts_roma_15.py",
+      "shorts": [
+        {
+          "id": "rts_roma_short_1",
+          "title": "¿El RTS estaba muerto? Dawn of War 4 acaba de cambiarlo todo 🚀⚔️ #shorts",
+          "audio": "audio_rts_roma_short_1.mp3",
+          "music": "music/Volatile Reaction.mp3",
+          "block": "Bloque RTS 2026",
+          "duration": "38s"
+        },
+        {
+          "id": "rts_roma_short_2",
+          "title": "Por fin: El juego de estrategia de Juego de Tronos que llevabas 15 años esperando 🐉👑 #shorts",
+          "audio": "audio_rts_roma_short_2.mp3",
+          "music": "music/Rites.mp3",
+          "block": "Bloque RTS 2026",
+          "duration": "42s"
+        },
+        {
+          "id": "rts_roma_short_3",
+          "title": "Vuelven El Rata y La Serpiente: Stronghold 4 renace en Unreal Engine 🏰🏹 #shorts",
+          "audio": "audio_rts_roma_short_3.mp3",
+          "music": "music/Moorland.mp3",
+          "block": "Bloque RTS 2026",
+          "duration": "40s"
+        },
+        {
+          "id": "rts_roma_short_4",
+          "title": "¿StarCraft 2 + Command & Conquer? Conoce ZeroSpace 🛸⚡ #shorts",
+          "audio": "audio_rts_roma_short_4.mp3",
+          "music": "music/Cipher2.mp3",
+          "block": "Bloque RTS 2026",
+          "duration": "36s"
+        },
+        {
+          "id": "rts_roma_short_5",
+          "title": "El mejor juego de la Segunda Guerra Mundial regresa remasterizado 🪖🔥 #shorts",
+          "audio": "audio_rts_roma_short_5.mp3",
+          "music": "music/Clash Defiant.mp3",
+          "block": "Bloque RTS 2026",
+          "duration": "35s"
+        },
+        {
+          "id": "rts_roma_short_6",
+          "title": "¿\"They Are Billions\" pero con Dinosaurios? RepTerra es una locura 🦖🧱 #shorts",
+          "audio": "audio_rts_roma_short_6.mp3",
+          "music": "music/Severe Tire Damage.mp3",
+          "block": "Bloque RTS 2026",
+          "duration": "38s"
+        },
+        {
+          "id": "rts_roma_short_7",
+          "title": "Batallas en una Esfera de Dyson: El sucesor de Supreme Commander 🌌💥 #shorts",
+          "audio": "audio_rts_roma_short_7.mp3",
+          "music": "music/Future Gladiator.mp3",
+          "block": "Bloque RTS 2026",
+          "duration": "42s"
+        },
+        {
+          "id": "rts_roma_short_8",
+          "title": "El cambio en StarCraft 2 que enloqueció a los profesionales ⚠️👾 #shorts",
+          "audio": "audio_rts_roma_short_8.mp3",
+          "music": "music/Cipher2.mp3",
+          "block": "Bloque RTS 2026",
+          "duration": "35s"
+        },
+        {
+          "id": "rts_roma_short_9",
+          "title": "Los 4 juegos de estrategia más jugados del mundo en 2026 👑📈 #shorts",
+          "audio": "audio_rts_roma_short_9.mp3",
+          "music": "music/Take a Chance.mp3",
+          "block": "Bloque RTS 2026",
+          "duration": "45s"
+        }
+      ]
+    },
+    {
+      "campaign_id": "roma_adicional_6",
+      "name": "Campaña: Táctica y Colapso Romano Adicional",
+      "count": 6,
+      "script_file": "scripts_15_shorts_rts_roma_2026.md",
+      "tts_script": "generate_audio_rts_roma_15.py",
+      "shorts": [
+        {
+          "id": "rts_roma_short_10",
+          "title": "Cómo un general de 25 años derrotó al Imperio Persa con una pala ⛏️🛡️ #shorts",
+          "audio": "audio_rts_roma_short_10.mp3",
+          "music": "music/Volatile Reaction.mp3",
+          "block": "Bloque Roma Histórica Adicional",
+          "duration": "42s"
+        },
+        {
+          "id": "rts_roma_short_11",
+          "title": "La reina traicionada que causó la destrucción de Italia 👑💔 #shorts",
+          "audio": "audio_rts_roma_short_11.mp3",
+          "music": "music/Rites.mp3",
+          "block": "Bloque Roma Histórica Adicional",
+          "duration": "38s"
+        },
+        {
+          "id": "rts_roma_short_12",
+          "title": "Los arqueros a caballo que aterrorizaron a los godos en Roma 🏹🐎 #shorts",
+          "audio": "audio_rts_roma_short_12.mp3",
+          "music": "music/Clash Defiant.mp3",
+          "block": "Bloque Roma Histórica Adicional",
+          "duration": "36s"
+        },
+        {
+          "id": "rts_roma_short_13",
+          "title": "La túnica ensangrentada que le enviaron al Emperador 🩸👑 #shorts",
+          "audio": "audio_rts_roma_short_13.mp3",
+          "music": "music/Volatile Reaction.mp3",
+          "block": "Bloque Roma Histórica Adicional",
+          "duration": "44s"
+        },
+        {
+          "id": "rts_roma_short_14",
+          "title": "¿Cuánto costaba reconstruir una ciudad arrasada en el siglo VI? 💰🏛️ #shorts",
+          "audio": "audio_rts_roma_short_14.mp3",
+          "music": "music/Moorland.mp3",
+          "block": "Bloque Roma Histórica Adicional",
+          "duration": "35s"
+        },
+        {
+          "id": "rts_roma_short_15",
+          "title": "20 años de sangre para perderlo todo en 36 meses 🛡️⏳ #shorts",
+          "audio": "audio_rts_roma_short_15.mp3",
+          "music": "music/Rites.mp3",
+          "block": "Bloque Roma Histórica Adicional",
+          "duration": "40s"
+        }
+      ]
+    },
+    {
+      "campaign_id": "creadores_crisis_8",
+      "name": "Campaña: Economía, Hipocresía y Crisis de Creadores",
+      "count": 8,
+      "script_file": "scripts_8_shorts_creadores_crisis.md",
+      "tts_script": "generate_audio_creadores_8.py",
+      "shorts": [
+        {
+          "id": "creadores_short_1",
+          "title": "¿Por qué un millonario de YouTube vende toda su colección de golpe? 📦📉 #shorts",
+          "audio": "audio_creadores_short_1.mp3",
+          "music": "music/Sneaky Snitch.mp3",
+          "block": "Cultura Digital & Creadores",
+          "duration": "38s"
+        },
+        {
+          "id": "creadores_short_2",
+          "title": "\"Sois unos cobardes\": Ángel Gaitán expone a los grandes influencers 🤐💸 #shorts",
+          "audio": "audio_creadores_short_2.mp3",
+          "music": "music/Sneaky Snitch.mp3",
+          "block": "Cultura Digital & Creadores",
+          "duration": "42s"
+        },
+        {
+          "id": "creadores_short_3",
+          "title": "Por qué a los streamers les aterroriza opinar de cosas obvias 🎙️👀 #shorts",
+          "audio": "audio_creadores_short_3.mp3",
+          "music": "music/Cipher2.mp3",
+          "block": "Cultura Digital & Creadores",
+          "duration": "35s"
+        },
+        {
+          "id": "creadores_short_4",
+          "title": "Cuando un YouTuber confiesa que odia a sus propios seguidores 🤢🤦 #shorts",
+          "audio": "audio_creadores_short_4.mp3",
+          "music": "music/Sneaky Snitch.mp3",
+          "block": "Cultura Digital & Creadores",
+          "duration": "40s"
+        },
+        {
+          "id": "creadores_short_5",
+          "title": "Ganó millones en la época dorada de YouTube... ¿por qué sigue con hipoteca? 🏦📉 #shorts",
+          "audio": "audio_creadores_short_5.mp3",
+          "music": "music/Take a Chance.mp3",
+          "block": "Cultura Digital & Creadores",
+          "duration": "44s"
+        },
+        {
+          "id": "creadores_short_6",
+          "title": "\"Vuelvo a tener éxito cuando yo quiera\": La trampa del ego digital ⌨️🧠 #shorts",
+          "audio": "audio_creadores_short_6.mp3",
+          "music": "music/Cipher2.mp3",
+          "block": "Cultura Digital & Creadores",
+          "duration": "36s"
+        },
+        {
+          "id": "creadores_short_7",
+          "title": "Cómo las multinacionales le quitaron el alma a los streamers 🤐🏢 #shorts",
+          "audio": "audio_creadores_short_7.mp3",
+          "music": "music/Sneaky Snitch.mp3",
+          "block": "Cultura Digital & Creadores",
+          "duration": "38s"
+        },
+        {
+          "id": "creadores_short_8",
+          "title": "Qué pasa cuando tu personaje de internet se come a tu persona real 🎭🥀 #shorts",
+          "audio": "audio_creadores_short_8.mp3",
+          "music": "music/Moorland.mp3",
+          "block": "Cultura Digital & Creadores",
+          "duration": "45s"
+        }
+      ]
+    },
+    {
+      "campaign_id": "terremoto_bpo_7",
+      "name": "Campaña: Crisis Corporativa y el Terremoto (BPO / Call Center)",
+      "count": 7,
+      "script_file": "scripts_7_shorts_terremoto_bpo.md",
+      "tts_script": "generate_audio_terremoto_7.py",
+      "shorts": [
+        {
+          "id": "terremoto_short_1",
+          "title": "El CEO que amenazó con demandar a todo un país tras el terremoto 🏛️💸 #shorts",
+          "audio": "audio_terremoto_short_1.mp3",
+          "music": "music/Clash Defiant.mp3",
+          "block": "Crisis Empresarial & Terremoto",
+          "duration": "38s"
+        },
+        {
+          "id": "terremoto_short_2",
+          "title": "La peor respuesta de una empresa tras una catástrofe natural 🤦‍♂️🔥 #shorts",
+          "audio": "audio_terremoto_short_2.mp3",
+          "music": "music/Sneaky Snitch.mp3",
+          "block": "Crisis Empresarial & Terremoto",
+          "duration": "35s"
+        },
+        {
+          "id": "terremoto_short_3",
+          "title": "\"Si te vas, te despido por abandono de puesto\": El audio que indignó a todos 🏢⚠️ #shorts",
+          "audio": "audio_terremoto_short_3.mp3",
+          "music": "music/Volatile Reaction.mp3",
+          "block": "Crisis Empresarial & Terremoto",
+          "duration": "42s"
+        },
+        {
+          "id": "terremoto_short_4",
+          "title": "\"La demandaré hasta que tenga 50 años\": La amenaza directa a una empleada ⚖️🤐 #shorts",
+          "audio": "audio_terremoto_short_4.mp3",
+          "music": "music/Clash Defiant.mp3",
+          "block": "Crisis Empresarial & Terremoto",
+          "duration": "40s"
+        },
+        {
+          "id": "terremoto_short_5",
+          "title": "El peligro de las falsas cadenas de WhatsApp en plena emergencia 📱🚨 #shorts",
+          "audio": "audio_terremoto_short_5.mp3",
+          "music": "music/Cipher2.mp3",
+          "block": "Crisis Empresarial & Terremoto",
+          "duration": "36s"
+        },
+        {
+          "id": "terremoto_short_6",
+          "title": "¿Por qué los call centers extranjeros operan con tanta frialdad en Latinoamérica? 🎧🌎 #shorts",
+          "audio": "audio_terremoto_short_6.mp3",
+          "music": "music/Take a Chance.mp3",
+          "block": "Crisis Empresarial & Terremoto",
+          "duration": "44s"
+        },
+        {
+          "id": "terremoto_short_7",
+          "title": "El manual de cómo destruir tu propia empresa en 24 horas 📉🧨 #shorts",
+          "audio": "audio_terremoto_short_7.mp3",
+          "music": "music/Sneaky Snitch.mp3",
+          "block": "Crisis Empresarial & Terremoto",
+          "duration": "42s"
+        }
+      ]
+    }
+  ]
+}

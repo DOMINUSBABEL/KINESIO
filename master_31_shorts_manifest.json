@@ -1,0 +1,273 @@
+{
+  "channel": "@dominus8735",
+  "channel_name": "DOMINUSBABEL",
+  "total_shorts": 31,
+  "campaigns": [
+    {
+      "campaign_id": "justiniano_belisario_16",
+      "name": "Campaña Principal: Justiniano, Belisario y la Reconquista Romana",
+      "count": 16,
+      "script_file": "scripts_16_shorts_justiniano_belisario.md",
+      "tts_script": "generate_audio_justiniano_belisario_16.py",
+      "shorts": [
+        {
+          "id": "justiniano_belisario_short_1",
+          "title": "La frase que salvó a Roma de desaparecer en un día 👑🔥 #shorts",
+          "audio": "audio_justiniano_belisario_short_1.mp3",
+          "music": "music/Rites.mp3",
+          "block": "Bloque 1: Ascenso Imperial y Nika",
+          "duration": "35s"
+        },
+        {
+          "id": "justiniano_belisario_short_2",
+          "title": "30.000 personas atrapadas: La sangrienta trampa de Nika 🏟️⚔️ #shorts",
+          "audio": "audio_justiniano_belisario_short_2.mp3",
+          "music": "music/Volatile Reaction.mp3",
+          "block": "Bloque 1: Ascenso Imperial y Nika",
+          "duration": "40s"
+        },
+        {
+          "id": "justiniano_belisario_short_3",
+          "title": "¿Por qué tus leyes actuales vienen de este hombre? 📜⚖️ #shorts",
+          "audio": "audio_justiniano_belisario_short_3.mp3",
+          "music": "music/Moorland.mp3",
+          "block": "Bloque 1: Ascenso Imperial y Nika",
+          "duration": "32s"
+        },
+        {
+          "id": "justiniano_belisario_short_4",
+          "title": "Pagaron 11.000 libras de oro por una \"Paz Eterna\" que duró 8 años 💰💀 #shorts",
+          "audio": "audio_justiniano_belisario_short_4.mp3",
+          "music": "music/Rites.mp3",
+          "block": "Bloque 1: Ascenso Imperial y Nika",
+          "duration": "38s"
+        },
+        {
+          "id": "justiniano_belisario_short_5",
+          "title": "Desembarcó un ejército entero sin que el enemigo se enterara 🚢⚔️ #shorts",
+          "audio": "audio_justiniano_belisario_short_5.mp3",
+          "music": "music/Clash Defiant.mp3",
+          "block": "Bloque 2: Guerra Relámpago en África",
+          "duration": "36s"
+        },
+        {
+          "id": "justiniano_belisario_short_6",
+          "title": "El plan perfecto que se convirtió en una emboscada suicida 🏹💥 #shorts",
+          "audio": "audio_justiniano_belisario_short_6.mp3",
+          "music": "music/Volatile Reaction.mp3",
+          "block": "Bloque 2: Guerra Relámpago en África",
+          "duration": "42s"
+        },
+        {
+          "id": "justiniano_belisario_short_7",
+          "title": "El único hombre no emperador en celebrar un Triunfo Romano 🏛️🎖️ #shorts",
+          "audio": "audio_justiniano_belisario_short_7.mp3",
+          "music": "music/Moorland.mp3",
+          "block": "Bloque 2: Guerra Relámpago en África",
+          "duration": "35s"
+        },
+        {
+          "id": "justiniano_belisario_short_8",
+          "title": "Así capturaron una ciudad inexpugnable entrando por las tuberías 💧🗡️ #shorts",
+          "audio": "audio_justiniano_belisario_short_8.mp3",
+          "music": "music/Clash Defiant.mp3",
+          "block": "Bloque 2: Guerra Relámpago en África",
+          "duration": "45s"
+        },
+        {
+          "id": "justiniano_belisario_short_9",
+          "title": "7.000 defensores vs 150.000 atacantes: El Asedio a la Ciudad Eterna 🛡️⚔️ #shorts",
+          "audio": "audio_justiniano_belisario_short_9.mp3",
+          "music": "music/Volatile Reaction.mp3",
+          "block": "Bloque 3: Colosal Asedio de Roma",
+          "duration": "45s"
+        },
+        {
+          "id": "justiniano_belisario_short_10",
+          "title": "Cómo destruir torres de asedio gigantes con una sola orden 🎯🏹 #shorts",
+          "audio": "audio_justiniano_belisario_short_10.mp3",
+          "music": "music/Clash Defiant.mp3",
+          "block": "Bloque 3: Colosal Asedio de Roma",
+          "duration": "38s"
+        },
+        {
+          "id": "justiniano_belisario_short_11",
+          "title": "La unidad olvidada que evitó la caída de Roma en la Puerta Flaminia 🛡️🩸 #shorts",
+          "audio": "audio_justiniano_belisario_short_11.mp3",
+          "music": "music/Volatile Reaction.mp3",
+          "block": "Bloque 3: Colosal Asedio de Roma",
+          "duration": "40s"
+        },
+        {
+          "id": "justiniano_belisario_short_12",
+          "title": "Cómo transformar la retirada del enemigo en una masacre 🌊⚔️ #shorts",
+          "audio": "audio_justiniano_belisario_short_12.mp3",
+          "music": "music/Clash Defiant.mp3",
+          "block": "Bloque 3: Colosal Asedio de Roma",
+          "duration": "37s"
+        },
+        {
+          "id": "justiniano_belisario_short_13",
+          "title": "El rey bárbaro que reconquistó toda Italia en un solo verano 👑⚡ #shorts",
+          "audio": "audio_justiniano_belisario_short_13.mp3",
+          "music": "music/Rites.mp3",
+          "block": "Bloque 4: Desgaste, Peste y Colapso",
+          "duration": "42s"
+        },
+        {
+          "id": "justiniano_belisario_short_14",
+          "title": "El virus que mató a 5.000 personas por día y destruyó el sueño de Roma ☣️💀 #shorts",
+          "audio": "audio_justiniano_belisario_short_14.mp3",
+          "music": "music/Moorland.mp3",
+          "block": "Bloque 4: Desgaste, Peste y Colapso",
+          "duration": "46s"
+        },
+        {
+          "id": "justiniano_belisario_short_15",
+          "title": "El rey que saqueó una ciudad romana y la reconstruyó idéntica en Persia 🏛️🔥 #shorts",
+          "audio": "audio_justiniano_belisario_short_15.mp3",
+          "music": "music/Rites.mp3",
+          "block": "Bloque 4: Desgaste, Peste y Colapso",
+          "duration": "44s"
+        },
+        {
+          "id": "justiniano_belisario_short_16",
+          "title": "La amarga verdad: ¿Destruyó Justiniano a Roma intentando salvarla? 🏛️🥀 #shorts",
+          "audio": "audio_justiniano_belisario_short_16.mp3",
+          "music": "music/Moorland.mp3",
+          "block": "Bloque 4: Desgaste, Peste y Colapso",
+          "duration": "48s"
+        }
+      ]
+    },
+    {
+      "campaign_id": "rts_roma_2026_15",
+      "name": "Campaña Adicional: La Era Dorada del RTS 2026 & Colapso Romano",
+      "count": 15,
+      "script_file": "scripts_15_shorts_rts_roma_2026.md",
+      "tts_script": "generate_audio_rts_roma_15.py",
+      "shorts": [
+        {
+          "id": "rts_roma_short_1",
+          "title": "¿El RTS estaba muerto? Dawn of War 4 acaba de cambiarlo todo 🚀⚔️ #shorts",
+          "audio": "audio_rts_roma_short_1.mp3",
+          "music": "music/Volatile Reaction.mp3",
+          "block": "Bloque 1: RTS 2026",
+          "duration": "38s"
+        },
+        {
+          "id": "rts_roma_short_2",
+          "title": "Por fin: El juego de estrategia de Juego de Tronos que llevabas 15 años esperando 🐉👑 #shorts",
+          "audio": "audio_rts_roma_short_2.mp3",
+          "music": "music/Rites.mp3",
+          "block": "Bloque 1: RTS 2026",
+          "duration": "42s"
+        },
+        {
+          "id": "rts_roma_short_3",
+          "title": "Vuelven El Rata y La Serpiente: Stronghold 4 renace en Unreal Engine 🏰🏹 #shorts",
+          "audio": "audio_rts_roma_short_3.mp3",
+          "music": "music/Moorland.mp3",
+          "block": "Bloque 1: RTS 2026",
+          "duration": "40s"
+        },
+        {
+          "id": "rts_roma_short_4",
+          "title": "¿StarCraft 2 + Command & Conquer? Conoce ZeroSpace 🛸⚡ #shorts",
+          "audio": "audio_rts_roma_short_4.mp3",
+          "music": "music/Cipher2.mp3",
+          "block": "Bloque 1: RTS 2026",
+          "duration": "36s"
+        },
+        {
+          "id": "rts_roma_short_5",
+          "title": "El mejor juego de la Segunda Guerra Mundial regresa remasterizado 🪖🔥 #shorts",
+          "audio": "audio_rts_roma_short_5.mp3",
+          "music": "music/Clash Defiant.mp3",
+          "block": "Bloque 1: RTS 2026",
+          "duration": "35s"
+        },
+        {
+          "id": "rts_roma_short_6",
+          "title": "¿\"They Are Billions\" pero con Dinosaurios? RepTerra es una locura 🦖🧱 #shorts",
+          "audio": "audio_rts_roma_short_6.mp3",
+          "music": "music/Severe Tire Damage.mp3",
+          "block": "Bloque 1: RTS 2026",
+          "duration": "38s"
+        },
+        {
+          "id": "rts_roma_short_7",
+          "title": "Batallas en una Esfera de Dyson: El sucesor de Supreme Commander 🌌💥 #shorts",
+          "audio": "audio_rts_roma_short_7.mp3",
+          "music": "music/Future Gladiator.mp3",
+          "block": "Bloque 1: RTS 2026",
+          "duration": "42s"
+        },
+        {
+          "id": "rts_roma_short_8",
+          "title": "El cambio en StarCraft 2 que enloqueció a los profesionales ⚠️👾 #shorts",
+          "audio": "audio_rts_roma_short_8.mp3",
+          "music": "music/Cipher2.mp3",
+          "block": "Bloque 1: RTS 2026",
+          "duration": "35s"
+        },
+        {
+          "id": "rts_roma_short_9",
+          "title": "Los 4 juegos de estrategia más jugados del mundo en 2026 👑📈 #shorts",
+          "audio": "audio_rts_roma_short_9.mp3",
+          "music": "music/Take a Chance.mp3",
+          "block": "Bloque 1: RTS 2026",
+          "duration": "45s"
+        },
+        {
+          "id": "rts_roma_short_10",
+          "title": "Cómo un general de 25 años derrotó al Imperio Persa con una pala ⛏️🛡️ #shorts",
+          "audio": "audio_rts_roma_short_10.mp3",
+          "music": "music/Volatile Reaction.mp3",
+          "block": "Bloque 2: Roma Histórica Adicional",
+          "duration": "42s"
+        },
+        {
+          "id": "rts_roma_short_11",
+          "title": "La reina traicionada que causó la destrucción de Italia 👑💔 #shorts",
+          "audio": "audio_rts_roma_short_11.mp3",
+          "music": "music/Rites.mp3",
+          "block": "Bloque 2: Roma Histórica Adicional",
+          "duration": "38s"
+        },
+        {
+          "id": "rts_roma_short_12",
+          "title": "Los arqueros a caballo que aterrorizaron a los godos en Roma 🏹🐎 #shorts",
+          "audio": "audio_rts_roma_short_12.mp3",
+          "music": "music/Clash Defiant.mp3",
+          "block": "Bloque 2: Roma Histórica Adicional",
+          "duration": "36s"
+        },
+        {
+          "id": "rts_roma_short_13",
+          "title": "La túnica ensangrentada que le enviaron al Emperador 🩸👑 #shorts",
+          "audio": "audio_rts_roma_short_13.mp3",
+          "music": "music/Volatile Reaction.mp3",
+          "block": "Bloque 2: Roma Histórica Adicional",
+          "duration": "44s"
+        },
+        {
+          "id": "rts_roma_short_14",
+          "title": "¿Cuánto costaba reconstruir una ciudad arrasada en el siglo VI? 💰🏛️ #shorts",
+          "audio": "audio_rts_roma_short_14.mp3",
+          "music": "music/Moorland.mp3",
+          "block": "Bloque 2: Roma Histórica Adicional",
+          "duration": "35s"
+        },
+        {
+          "id": "rts_roma_short_15",
+          "title": "20 años de sangre para perderlo todo en 36 meses 🛡️⏳ #shorts",
+          "audio": "audio_rts_roma_short_15.mp3",
+          "music": "music/Rites.mp3",
+          "block": "Bloque 2: Roma Histórica Adicional",
+          "duration": "40s"
+        }
+      ]
+    }
+  ]
+}
