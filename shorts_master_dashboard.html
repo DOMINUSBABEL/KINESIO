@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOMINUSBABEL • Master Shorts Suite (46 Videos)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #090D16;
+      --card-bg: #111827;
+      --card-border: #1F2937;
+      --text-main: #F3F4F6;
+      --text-muted: #9CA3AF;
+      --gold: #FAC815;
+      --cyan: #00E5FF;
+      --crimson: #FF0033;
+      --amber: #FF9900;
+      --bronze: #D4AF37;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      padding: 30px 20px;
+      line-height: 1.5;
+    }
+    .header {
+      max-width: 1400px;
+      margin: 0 auto 30px auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding-bottom: 25px;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #FFFFFF, #9CA3AF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .header p {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: 4px;
+    }
+    .stats-bar {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    .stat-pill {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .stat-pill span {
+      color: var(--gold);
+      font-weight: 800;
+      margin-left: 5px;
+    }
+    .filter-tabs {
+      max-width: 1400px;
+      margin: 0 auto 25px auto;
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+    .filter-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background: #1F2937;
+      color: #FFFFFF;
+      border-color: var(--gold);
+    }
+    .grid {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+      position: relative;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(250, 200, 21, 0.4);
+    }
+    .card-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      align-self: flex-start;
+    }
+    .badge-rome { background: rgba(250, 200, 21, 0.15); color: var(--gold); border: 1px solid var(--gold); }
+    .badge-rts { background: rgba(0, 229, 255, 0.15); color: var(--cyan); border: 1px solid var(--cyan); }
+    .badge-bronze { background: rgba(212, 175, 55, 0.15); color: var(--bronze); border: 1px solid var(--bronze); }
+    .badge-creators { background: rgba(255, 0, 51, 0.15); color: var(--crimson); border: 1px solid var(--crimson); }
+    .badge-crisis { background: rgba(255, 153, 0, 0.15); color: var(--amber); border: 1px solid var(--amber); }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 15px;
+    }
+    .card-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .card-meta span {
+      font-family: 'JetBrains Mono', monospace;
+      color: #D1D5DB;
+    }
+    .card-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .btn-copy {
+      flex: 1;
+      background: #1F2937;
+      border: 1px solid #374151;
+      color: #E5E7EB;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn-copy:hover {
+      background: #374151;
+      color: #FFFFFF;
+    }
+    .btn-copy:active {
+      background: var(--gold);
+      color: #000000;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div>
+      <h1>DOMINUSBABEL • Catálogo de 46 Shorts</h1>
+      <p>Pipeline de Producción Audiovisual de Alta Retención (@dominus8735)</p>
+    </div>
+    <div class="stats-bar">
+      <div class="stat-pill">Total Shorts: <span>46</span></div>
+      <div class="stat-pill">Campañas: <span>5</span></div>
+      <div class="stat-pill">Estándar: <span>1080x1920 9:16</span></div>
+      <div class="stat-pill">Voz: <span>Jorge Neural</span></div>
+    </div>
+  </div>
+
+  <div class="filter-tabs">
+    <button class="filter-btn active" onclick="filterCards('all')">Todos (46)</button>
+    <button class="filter-btn" onclick="filterCards('rome')">👑 Justiniano & Belisario (16)</button>
+    <button class="filter-btn" onclick="filterCards('rts')">🚀 RTS 2026 (9)</button>
+    <button class="filter-btn" onclick="filterCards('tactics')">⚔️ Táctica Romana (6)</button>
+    <button class="filter-btn" onclick="filterCards('creators')">📹 Crisis Creadores (8)</button>
+    <button class="filter-btn" onclick="filterCards('crisis')">🚨 Terremoto & BPO (7)</button>
+  </div>
+
+  <div class="grid" id="shortsGrid">
+    <!-- JS Injected Cards -->
+  </div>
+
+  <script>
+    const manifestUrl = "master_46_shorts_manifest.json";
+    let allShorts = [];
+
+    async function loadData() {
+      try {
+        const res = await fetch(manifestUrl);
+        const data = await res.json();
+        
+        data.campaigns.forEach(c => {
+          c.shorts.forEach(s => {
+            s.campaign_id = c.campaign_id;
+            s.campaign_name = c.name;
+            allShorts.push(s);
+          });
+        });
+        renderCards(allShorts);
+      } catch (err) {
+        console.error("Error loading manifest", err);
+      }
+    }
+
+    function getBadgeClass(cid) {
+      if (cid.includes("justiniano")) return "badge-rome";
+      if (cid.includes("rts_2026")) return "badge-rts";
+      if (cid.includes("roma_adicional")) return "badge-bronze";
+      if (cid.includes("creadores")) return "badge-creators";
+      return "badge-crisis";
+    }
+
+    function renderCards(shorts) {
+      const grid = document.getElementById("shortsGrid");
+      grid.innerHTML = "";
+
+      shorts.forEach((s, idx) => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.dataset.campaign = s.campaign_id;
+
+        const badgeCls = getBadgeClass(s.campaign_id);
+        
+        card.innerHTML = `
+          <div>
+            <div class="card-badge ${badgeCls}">${s.block || "ESPECIAL"}</div>
+            <div class="card-title">${s.title}</div>
+            <div class="card-meta">
+              <div>ID: <span>${s.id}</span></div>
+              <div>Duración: <span>${s.duration}</span></div>
+              <div>Pista Musical: <span>${s.music.replace('music/', '')}</span></div>
+            </div>
+          </div>
+          <div class="card-actions">
+            <button class="btn-copy" onclick="copyText('${s.title.replace(/'/g, "\\'")}')">📋 Copiar Título</button>
+            <button class="btn-copy" onclick="copyText('${s.id}_final.mp4')">🎬 Ver MP4</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function filterCards(cat) {
+      document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+      event.target.classList.add("active");
+
+      if (cat === "all") {
+        renderCards(allShorts);
+      } else if (cat === "rome") {
+        renderCards(allShorts.filter(s => s.campaign_id.includes("justiniano")));
+      } else if (cat === "rts") {
+        renderCards(allShorts.filter(s => s.campaign_id.includes("rts_2026")));
+      } else if (cat === "tactics") {
+        renderCards(allShorts.filter(s => s.campaign_id.includes("roma_adicional")));
+      } else if (cat === "creators") {
+        renderCards(allShorts.filter(s => s.campaign_id.includes("creadores")));
+      } else if (cat === "crisis") {
+        renderCards(allShorts.filter(s => s.campaign_id.includes("terremoto")));
+      }
+    }
+
+    function copyText(str) {
+      navigator.clipboard.writeText(str);
+      alert("Copiado al portapapeles: " + str);
+    }
+
+    loadData();
+  </script>
+</body>
+</html>
